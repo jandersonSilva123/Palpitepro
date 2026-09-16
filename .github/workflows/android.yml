@@ -38,7 +38,7 @@ jobs:
 
       - name: Preparar projeto
         run: |
-          unzip -q PalpitePro_Cloud_Build.zip
+          unzip -o -q PalpitePro_Cloud_Build.zip
           chmod +x projeto/gradlew
 
       - name: Compilar APK
