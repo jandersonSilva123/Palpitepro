@@ -31,11 +31,11 @@ jobs:
           sdkmanager --install "platforms;android-36"
           sdkmanager --install "build-tools;36.0.0"
 
-            - name: Preparar projeto
+      - name: Preparar projeto
         run: |
           unzip -o -q PalpitePro_Cloud_Build.zip
-          echo "===== VERSAO DO GRADLE ====="
-          cat gradle/wrapper/gradle-wrapper.properties
+          echo "===== ARQUIVOS DO PROJETO ====="
+          find . -path './.git' -prune -o -type f -print | sort
 
       - name: Instalar Gradle
         run: |
@@ -54,7 +54,3 @@ jobs:
         with:
           name: PalpitePro-debug-apk
           path: "app/build/outputs/apk/debug/*.apk"
-        
-          
-          
-          
