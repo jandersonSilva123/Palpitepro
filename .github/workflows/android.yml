@@ -31,8 +31,30 @@ jobs:
           sdkmanager --install "platforms;android-36"
           sdkmanager --install "build-tools;36.0.0"
 
-      - name: Preparar projeto
+            - name: Preparar projeto
         run: |
           unzip -o -q PalpitePro_Cloud_Build.zip
-          echo "===== CONTEUDO EXTRAIDO ====="
-          find . -maxdepth 4 -type f | sort
+          echo "===== VERSAO DO GRADLE ====="
+          cat gradle/wrapper/gradle-wrapper.properties
+
+      - name: Instalar Gradle
+        run: |
+          GRADLE_VERSION=$(sed -n 's/.*gradle-\([0-9.]*\)-bin.zip.*/\1/p' gradle/wrapper/gradle-wrapper.properties)
+          echo "Gradle encontrado: $GRADLE_VERSION"
+          wget -q "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -O /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /tmp
+          echo "/tmp/gradle-${GRADLE_VERSION}/bin" >> "$GITHUB_PATH"
+
+      - name: Compilar APK
+        run: |
+          gradle assembleDebug --no-daemon
+
+      - name: Disponibilizar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: PalpitePro-debug-apk
+          path: "app/build/outputs/apk/debug/*.apk"
+        
+          
+          
+          
