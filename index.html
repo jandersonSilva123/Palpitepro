@@ -4,158 +4,552 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>MrGreen</title>
+<title>GolZen - Palpites Esportivos</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #020617;
-  color: #fff;
+:root{
+  --bg:#030706;
+  --card:#08120e;
+  --card2:#0b1913;
+  --green:#39ff68;
+  --green2:#16a34a;
+  --border:#173b29;
+  --text:#ffffff;
+  --muted:#94a3a8;
+  --yellow:#facc15;
 }
 
-header {
-  text-align: center;
-  padding: 28px 15px;
-  background: linear-gradient(135deg, #020b3d, #071d72);
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at top,#092719 0%,#030706 38%);
+  color:var(--text);
+  min-height:100vh;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 38px;
-  color: #22c55e;
+/* HEADER */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(3,7,6,.94);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
 }
 
-header p {
-  margin: 8px 0 0;
-  color: #cbd5e1;
+.header-inner{
+  max-width:1150px;
+  margin:auto;
+  padding:15px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 
-main {
-  max-width: 720px;
-  margin: auto;
-  padding: 18px;
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:25px;
+  font-weight:900;
+  color:var(--green);
 }
 
-.card {
-  background: #071027;
-  border: 1px solid #334155;
-  border-radius: 20px;
-  padding: 22px;
-  margin-bottom: 18px;
+.logo-icon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#0d3b20,#0a1b12);
+  border:1px solid #24643d;
+  font-size:22px;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 18px;
+.logo span{
+  color:#fff;
 }
 
-label {
-  display: block;
-  margin: 14px 0 6px;
-  color: #cbd5e1;
-  font-weight: bold;
+.logo small{
+  display:block;
+  font-size:8px;
+  letter-spacing:3px;
+  color:#728079;
+  margin-top:3px;
+}
+
+nav{
+  display:flex;
+  gap:25px;
+}
+
+nav a{
+  color:#cbd5d1;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:bold;
+}
+
+nav a:hover{
+  color:var(--green);
+}
+
+/* HERO */
+
+.hero{
+  max-width:1150px;
+  margin:auto;
+  padding:65px 20px 45px;
+}
+
+.hero-box{
+  position:relative;
+  overflow:hidden;
+  padding:55px 45px;
+  border:1px solid var(--border);
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(57,255,104,.13),transparent 30%),
+    linear-gradient(135deg,#071810,#030806);
+}
+
+.hero-box:after{
+  content:"⚽";
+  position:absolute;
+  right:45px;
+  bottom:-25px;
+  font-size:150px;
+  opacity:.06;
+}
+
+.badge{
+  display:inline-block;
+  padding:8px 13px;
+  border-radius:30px;
+  border:1px solid #23633a;
+  background:#082817;
+  color:var(--green);
+  font-size:12px;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
+.hero h1{
+  font-size:56px;
+  line-height:1;
+  margin-bottom:18px;
+}
+
+.hero h1 span{
+  color:var(--green);
+}
+
+.hero p{
+  max-width:650px;
+  color:#b7c4be;
+  font-size:17px;
+  line-height:1.7;
+}
+
+.hero-buttons{
+  margin-top:28px;
+}
+
+.btn{
+  border:0;
+  border-radius:13px;
+  padding:15px 24px;
+  background:var(--green);
+  color:#001508;
+  font-weight:900;
+  font-size:15px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 25px rgba(57,255,104,.2);
+}
+
+.btn-secondary{
+  background:#0b1812;
+  color:#dce7e1;
+  border:1px solid var(--border);
+  margin-left:8px;
+}
+
+/* CONTAINER */
+
+.container{
+  max-width:1150px;
+  margin:auto;
+  padding:0 20px 50px;
+}
+
+.section-title{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  margin:35px 0 18px;
+}
+
+.section-title h2{
+  font-size:25px;
+}
+
+.section-title span{
+  color:var(--green);
+}
+
+.section-title small{
+  color:#65736d;
+}
+
+/* JOGOS */
+
+.games{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.game{
+  background:linear-gradient(145deg,#0a1912,#06100c);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  transition:.2s;
+}
+
+.game:hover{
+  transform:translateY(-3px);
+  border-color:#286d42;
+}
+
+.league{
+  color:#7f9088;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:18px;
+}
+
+.teams{
+  display:grid;
+  grid-template-columns:1fr 45px 1fr;
+  align-items:center;
+  text-align:center;
+}
+
+.team{
+  font-weight:900;
+  font-size:15px;
+}
+
+.vs{
+  color:#56645e;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.game-tip{
+  margin-top:18px;
+  padding:11px;
+  text-align:center;
+  border-radius:10px;
+  background:#082c18;
+  color:var(--green);
+  border:1px solid #175d31;
+  font-size:12px;
+  font-weight:bold;
+}
+
+/* PALPITE */
+
+.card{
+  background:linear-gradient(145deg,#091711,#06100c);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:17px;
+}
+
+label{
+  display:block;
+  margin-bottom:7px;
+  color:#cbd5d1;
+  font-size:13px;
+  font-weight:bold;
 }
 
 input,
-select {
-  width: 100%;
-  padding: 14px;
-  border-radius: 11px;
-  border: 1px solid #475569;
-  background: #020617;
-  color: white;
-  font-size: 16px;
+select{
+  width:100%;
+  padding:14px;
+  border-radius:11px;
+  border:1px solid #254b36;
+  background:#030806;
+  color:#fff;
+  font-size:15px;
+  outline:none;
 }
 
-button {
-  width: 100%;
-  padding: 17px;
-  margin-top: 20px;
-  border: 0;
-  border-radius: 13px;
-  background: #00a000;
-  color: white;
-  font-size: 19px;
-  font-weight: bold;
+input:focus,
+select:focus{
+  border-color:var(--green);
+  box-shadow:0 0 0 2px rgba(57,255,104,.08);
 }
 
-button:active {
-  transform: scale(.98);
+.full{
+  grid-column:1/-1;
 }
 
-.match {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
+.preview{
+  margin-top:20px;
+  padding:20px;
+  border-radius:15px;
+  background:#030806;
+  border:1px solid #143522;
 }
 
-.team {
-  flex: 1;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
+.preview-label{
+  text-align:center;
+  color:#6f7e77;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom:12px;
 }
 
-.vs {
-  color: #94a3b8;
-  font-weight: bold;
+.match{
+  display:grid;
+  grid-template-columns:1fr 60px 1fr;
+  align-items:center;
+  text-align:center;
 }
 
-.result {
-  display: none;
+.match-team{
+  font-size:19px;
+  font-weight:900;
 }
 
-.result.show {
-  display: block;
+.match-vs{
+  color:var(--green);
+  font-size:12px;
+  font-weight:bold;
 }
 
-.stat {
-  margin: 15px 0;
-  padding: 14px;
-  background: #020617;
-  border-radius: 12px;
+/* RESULTADO */
+
+.result{
+  display:none;
+  margin-top:20px;
 }
 
-.stat-title {
-  color: #cbd5e1;
-  margin-bottom: 7px;
+.result.show{
+  display:block;
 }
 
-.value {
-  font-size: 21px;
-  font-weight: bold;
-  color: #22c55e;
+.result-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+.result-header h2{
+  font-size:22px;
 }
 
-.analysis {
-  line-height: 1.6;
-  color: #dbeafe;
+.status{
+  padding:7px 10px;
+  border-radius:20px;
+  background:#082c18;
+  color:var(--green);
+  font-size:10px;
+  font-weight:bold;
 }
 
-.warning {
-  color: #fbbf24;
-  font-size: 13px;
-  line-height: 1.5;
-  margin-top: 18px;
+.main-prediction{
+  padding:22px;
+  margin-bottom:15px;
+  text-align:center;
+  border-radius:16px;
+  background:
+    radial-gradient(circle at center,rgba(57,255,104,.12),transparent 60%),
+    #030806;
+  border:1px solid #1b5630;
 }
 
-footer {
-  text-align: center;
-  color: #64748b;
-  padding: 30px;
+.main-prediction small{
+  color:#718078;
+  text-transform:uppercase;
+  letter-spacing:2px;
+}
+
+.main-prediction strong{
+  display:block;
+  margin-top:10px;
+  color:var(--green);
+  font-size:27px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.stat{
+  padding:16px;
+  border-radius:13px;
+  background:#030806;
+  border:1px solid #143522;
+}
+
+.stat-title{
+  color:#7f9088;
+  font-size:11px;
+  margin-bottom:8px;
+}
+
+.value{
+  color:var(--green);
+  font-size:20px;
+  font-weight:900;
+}
+
+.analysis{
+  margin-top:15px;
+  padding:18px;
+  border-radius:13px;
+  background:#030806;
+  border:1px solid #143522;
+  color:#c8d4ce;
+  line-height:1.7;
+}
+
+.warning{
+  margin-top:18px;
+  padding:12px;
+  border-radius:10px;
+  background:#241d05;
+  border:1px solid #4b3c0b;
+  color:#facc15;
+  font-size:11px;
+  line-height:1.6;
+}
+
+/* FOOTER */
+
+footer{
+  border-top:1px solid var(--border);
+  background:#020504;
+  text-align:center;
+  padding:35px 20px;
+  color:#64736c;
+  font-size:12px;
+}
+
+footer strong{
+  display:block;
+  color:var(--green);
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+  nav{
+    display:none;
+  }
+
+  .hero{
+    padding:30px 15px;
+  }
+
+  .hero-box{
+    padding:35px 25px;
+    border-radius:22px;
+  }
+
+  .hero h1{
+    font-size:42px;
+  }
+
+  .hero p{
+    font-size:15px;
+  }
+
+  .hero-box:after{
+    font-size:100px;
+    right:10px;
+  }
+
+  .games{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .container{
+    padding:0 15px 40px;
+  }
+
+  .section-title h2{
+    font-size:21px;
+  }
+
+  .btn{
+    width:100%;
+  }
+
+  .btn-secondary{
+    margin:9px 0 0;
+  }
+}
+
+@media(max-width:450px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .match{
+    grid-template-columns:1fr 40px 1fr;
+  }
+
+  .match-team{
+    font-size:15px;
+  }
+
 }
 </style>
 </head>
@@ -163,161 +557,563 @@ footer {
 <body>
 
 <header>
-  <h1>⚽ MrGreen</h1>
-  <p>Seus palpites esportivos em um só lugar</p>
+  <div class="header-inner">
+
+    <div class="logo">
+      <div class="logo-icon">⚽</div>
+
+      <div>
+        Gol<span>Zen</span>
+        <small>PALPITES ESPORTIVOS</small>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#inicio">Início</a>
+      <a href="#jogos">Jogos</a>
+      <a href="#palpites">Palpites</a>
+    </nav>
+
+  </div>
 </header>
 
-<main>
 
-<div class="card">
+<section class="hero" id="inicio">
 
-  <div class="title">🎯 Gerar Palpite</div>
+  <div class="hero-box">
 
-  <label>Time da casa</label>
-  <input id="timeCasa" placeholder="Ex.: Flamengo">
-
-  <label>Time visitante</label>
-  <input id="timeFora" placeholder="Ex.: Palmeiras">
-
-  <label>📅 Data do jogo</label>
-  <input id="data" type="date">
-
-  <label>🏟️ Local do jogo</label>
-  <select id="local">
-    <option value="casa">Time da casa é mandante</option>
-    <option value="neutro">Campo neutro</option>
-  </select>
-
-  <div class="match">
-    <div class="team" id="nomeCasa">Time da Casa</div>
-    <div class="vs">VS</div>
-    <div class="team" id="nomeFora">Time Visitante</div>
-  </div>
-
-  <button onclick="gerarPalpite()">
-    🎯 GERAR PALPITE
-  </button>
-
-  <div id="erro" class="warning"></div>
-
-</div>
-
-
-<div id="resultado" class="card result">
-
-  <div class="title">📊 Análise do Confronto</div>
-
-  <div class="stat">
-    <div class="stat-title">🏠 Vitória do mandante</div>
-    <div class="value" id="vitoriaCasa">--</div>
-  </div>
-
-  <div class="stat">
-    <div class="stat-title">🤝 Empate</div>
-    <div class="value" id="empate">--</div>
-  </div>
-
-  <div class="stat">
-    <div class="stat-title">✈️ Vitória do visitante</div>
-    <div class="value" id="vitoriaFora">--</div>
-  </div>
-
-
-  <div class="grid">
-
-    <div class="stat">
-      <div class="stat-title">⚽ Mais de 1,5 gols</div>
-      <div class="value" id="mais15">--</div>
+    <div class="badge">
+      ⚡ ANÁLISES ESPORTIVAS
     </div>
 
-    <div class="stat">
-      <div class="stat-title">⚽ Mais de 2,5 gols</div>
-      <div class="value" id="mais25">--</div>
-    </div>
+    <h1>
+      Gol<span>Zen</span>
+    </h1>
 
-    <div class="stat">
-      <div class="stat-title">🥅 Ambas marcam</div>
-      <div class="value" id="ambas">--</div>
-    </div>
+    <p>
+      Consulte estimativas demonstrativas para confrontos
+      de futebol e acompanhe informações de forma simples,
+      rápida e organizada.
+    </p>
 
-    <div class="stat">
-      <div class="stat-title">📈 Total estimado</div>
-      <div class="value" id="totalGols">--</div>
+    <div class="hero-buttons">
+
+      <button class="btn"
+        onclick="document.getElementById('palpites').scrollIntoView({behavior:'smooth'})">
+        🎯 Gerar Palpite
+      </button>
+
+      <button class="btn btn-secondary"
+        onclick="document.getElementById('jogos').scrollIntoView({behavior:'smooth'})">
+        ⚽ Ver Jogos
+      </button>
+
     </div>
 
   </div>
 
-
-  <div class="stat">
-
-    <div class="stat-title">
-      🎯 Placar sugerido
-    </div>
-
-    <div class="value" id="placar">
-      --
-    </div>
-
-  </div>
+</section>
 
 
-  <div class="stat">
+<main class="container">
 
-    <div class="stat-title">
-      🔥 Tendência
-    </div>
 
-    <div class="value" id="tendencia">
-      --
-    </div>
+<section id="jogos">
+
+  <div class="section-title">
+
+    <h2>
+      ⚽ Jogos em <span>Destaque</span>
+    </h2>
+
+    <small>Confrontos demonstrativos</small>
 
   </div>
 
 
-  <div class="stat">
+  <div class="games">
 
-    <div class="stat-title">
-      🧠 Análise
+
+    <div class="game">
+
+      <div class="league">
+        🇧🇷 Brasileirão Série A
+      </div>
+
+      <div class="teams">
+
+        <div class="team">
+          Flamengo
+        </div>
+
+        <div class="vs">
+          VS
+        </div>
+
+        <div class="team">
+          Palmeiras
+        </div>
+
+      </div>
+
+      <div class="game-tip">
+        🎯 Exemplo: análise do confronto
+      </div>
+
     </div>
 
-    <div class="analysis" id="analise">
-      --
+
+    <div class="game">
+
+      <div class="league">
+        🏆 Champions League
+      </div>
+
+      <div class="teams">
+
+        <div class="team">
+          Real Madrid
+        </div>
+
+        <div class="vs">
+          VS
+        </div>
+
+        <div class="team">
+          Man. City
+        </div>
+
+      </div>
+
+      <div class="game-tip">
+        🎯 Exemplo: análise do confronto
+      </div>
+
     </div>
+
+
+    <div class="game">
+
+      <div class="league">
+        🏴 Premier League
+      </div>
+
+      <div class="teams">
+
+        <div class="team">
+          Arsenal
+        </div>
+
+        <div class="vs">
+          VS
+        </div>
+
+        <div class="team">
+          Liverpool
+        </div>
+
+      </div>
+
+      <div class="game-tip">
+        🎯 Exemplo: análise do confronto
+      </div>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+<section id="palpites">
+
+  <div class="section-title">
+
+    <h2>
+      🎯 Gerar <span>Palpite</span>
+    </h2>
+
+    <small>Estimativa demonstrativa</small>
 
   </div>
 
 
-  <div class="warning">
-    ⚠️ Estas probabilidades são estimativas do modelo desta página e
-    não representam dados oficiais ou garantia de resultado.
+  <div class="card">
+
+
+    <div class="form-grid">
+
+
+      <div>
+
+        <label>
+          🏠 Time da casa
+        </label>
+
+        <input
+          id="timeCasa"
+          placeholder="Ex.: Flamengo"
+          oninput="atualizarTimes()">
+
+      </div>
+
+
+      <div>
+
+        <label>
+          ✈️ Time visitante
+        </label>
+
+        <input
+          id="timeFora"
+          placeholder="Ex.: Palmeiras"
+          oninput="atualizarTimes()">
+
+      </div>
+
+
+      <div>
+
+        <label>
+          📅 Data do jogo
+        </label>
+
+        <input
+          id="data"
+          type="date">
+
+      </div>
+
+
+      <div>
+
+        <label>
+          🏟️ Local do jogo
+        </label>
+
+        <select id="local">
+
+          <option value="casa">
+            Time da casa é mandante
+          </option>
+
+          <option value="neutro">
+            Campo neutro
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="full">
+
+        <div class="preview">
+
+          <div class="preview-label">
+            Confronto
+          </div>
+
+          <div class="match">
+
+            <div
+              class="match-team"
+              id="nomeCasa">
+              Time da Casa
+            </div>
+
+            <div class="match-vs">
+              VS
+            </div>
+
+            <div
+              class="match-team"
+              id="nomeFora">
+              Time Visitante
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="full">
+
+        <button
+          class="btn"
+          style="width:100%;"
+          onclick="gerarPalpite()">
+
+          🎯 GERAR PALPITE
+
+        </button>
+
+      </div>
+
+
+    </div>
+
+
+    <div
+      id="erro"
+      class="warning"
+      style="display:none;">
+    </div>
+
+
   </div>
 
-</div>
+
+  <div
+    id="resultado"
+    class="card result">
+
+
+    <div class="result-header">
+
+      <h2>
+        📊 Análise do Confronto
+      </h2>
+
+      <div class="status">
+        ESTIMATIVA
+      </div>
+
+    </div>
+
+
+    <div class="main-prediction">
+
+      <small>
+        Tendência principal
+      </small>
+
+      <strong id="tendencia">
+        --
+      </strong>
+
+    </div>
+
+
+    <div class="stats">
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          🏠 Vitória mandante
+        </div>
+
+        <div
+          class="value"
+          id="vitoriaCasa">
+          --
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          🤝 Empate
+        </div>
+
+        <div
+          class="value"
+          id="empate">
+          --
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          ✈️ Vitória visitante
+        </div>
+
+        <div
+          class="value"
+          id="vitoriaFora">
+          --
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          ⚽ Mais de 1,5 gols
+        </div>
+
+        <div
+          class="value"
+          id="mais15">
+          --
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          ⚽ Mais de 2,5 gols
+        </div>
+
+        <div
+          class="value"
+          id="mais25">
+          --
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          🥅 Ambas marcam
+        </div>
+
+        <div
+          class="value"
+          id="ambas">
+          --
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          📈 Total estimado
+        </div>
+
+        <div
+          class="value"
+          id="totalGols">
+          --
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          🎯 Placar sugerido
+        </div>
+
+        <div
+          class="value"
+          id="placar">
+          --
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="analysis">
+
+      <strong>🧠 Análise</strong>
+
+      <p
+        id="analise"
+        style="margin-top:8px;">
+        --
+      </p>
+
+    </div>
+
+
+    <div class="warning">
+
+      ⚠️ As probabilidades exibidas são
+      estimativas demonstrativas geradas
+      pela página. Não representam dados
+      oficiais nem garantem resultados.
+
+    </div>
+
+
+  </div>
+
+</section>
+
 
 </main>
 
+
 <footer>
-  MrGreen © 2026
+
+  <strong>⚽ GolZen</strong>
+
+  Palpites Esportivos © 2026
+
+  <br><br>
+
+  <small>
+    Projeto independente.
+    As estimativas desta página são demonstrativas.
+  </small>
+
 </footer>
 
 
 <script>
 
-function numero(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+function numero(min,max){
+
+  return Math.floor(
+    Math.random() * (max-min+1)
+  ) + min;
+
 }
 
 
-function gerarPalpite() {
+function atualizarTimes(){
 
   const casa =
-    document.getElementById("timeCasa").value.trim();
+    document.getElementById("timeCasa")
+    .value.trim();
 
   const fora =
-    document.getElementById("timeFora").value.trim();
+    document.getElementById("timeFora")
+    .value.trim();
 
-  const data =
-    document.getElementById("data").value;
+
+  document.getElementById("nomeCasa")
+    .textContent =
+    casa || "Time da Casa";
+
+
+  document.getElementById("nomeFora")
+    .textContent =
+    fora || "Time Visitante";
+
+}
+
+
+function gerarPalpite(){
+
+  const casa =
+    document.getElementById("timeCasa")
+    .value.trim();
+
+  const fora =
+    document.getElementById("timeFora")
+    .value.trim();
 
   const local =
     document.getElementById("local").value;
@@ -325,161 +1121,250 @@ function gerarPalpite() {
   const erro =
     document.getElementById("erro");
 
-  if (!casa || !fora) {
+
+  if(!casa || !fora){
+
+    erro.style.display="block";
 
     erro.textContent =
       "⚠️ Digite o nome dos dois times.";
 
     return;
+
   }
 
-  if (casa.toLowerCase() === fora.toLowerCase()) {
+
+  if(
+    casa.toLowerCase() ===
+    fora.toLowerCase()
+  ){
+
+    erro.style.display="block";
 
     erro.textContent =
       "⚠️ Os times precisam ser diferentes.";
 
     return;
+
   }
 
-  erro.textContent = "";
+
+  erro.style.display="none";
 
 
-  document.getElementById("nomeCasa").textContent = casa;
-  document.getElementById("nomeFora").textContent = fora;
+  atualizarTimes();
 
 
   /*
-   * ESTIMATIVA DEMONSTRATIVA
+   * ESTIMATIVAS DEMONSTRATIVAS
    *
-   * Os valores abaixo são gerados pelo
-   * modelo da página e não vêm de uma
-   * base estatística externa.
+   * Os valores abaixo são gerados
+   * aleatoriamente pela página.
    */
 
 
-  let casaProb = numero(45, 65);
-  let foraProb = numero(20, 40);
+  let casaProb =
+    numero(45,65);
 
-  if (local === "neutro") {
+  let foraProb =
+    numero(20,40);
+
+
+  if(local === "neutro"){
+
     casaProb -= 5;
     foraProb += 5;
+
   }
 
 
   let empateProb =
     100 - casaProb - foraProb;
 
-  if (empateProb < 10) {
+
+  if(empateProb < 10){
+
     empateProb = 10;
-    casaProb = 100 - empateProb - foraProb;
+
+    casaProb =
+      100 -
+      empateProb -
+      foraProb;
+
   }
 
 
-  let golsCasa = numero(0, 3);
-  let golsFora = numero(0, 3);
+  const golsCasa =
+    numero(0,3);
+
+  const golsFora =
+    numero(0,3);
+
 
   const total =
     golsCasa + golsFora;
 
 
-  let mais15 =
-    numero(65, 85);
+  const mais15 =
+    numero(65,85);
 
-  let mais25 =
-    numero(45, 70);
+  const mais25 =
+    numero(45,70);
 
-  let ambas =
-    numero(45, 70);
+  const ambas =
+    numero(45,70);
 
 
   let tendencia;
 
 
-  if (casaProb >= foraProb && casaProb >= empateProb) {
+  if(
+    casaProb >= foraProb &&
+    casaProb >= empateProb
+  ){
 
     tendencia =
       "Vitória do " + casa;
 
-  } else if (foraProb >= casaProb && foraProb >= empateProb) {
+  }
+
+  else if(
+    foraProb >= casaProb &&
+    foraProb >= empateProb
+  ){
 
     tendencia =
       "Vitória do " + fora;
 
-  } else {
+  }
+
+  else{
 
     tendencia =
       "Empate";
+
   }
 
 
   let analise;
 
 
-  if (golsCasa > golsFora) {
+  if(golsCasa > golsFora){
 
     analise =
-      "A estimativa desta página indica maior probabilidade para o mandante, com placar simulado de "
-      + golsCasa + " x " + golsFora + ".";
+      "A estimativa demonstrativa indica " +
+      "vantagem do mandante, com placar " +
+      "simulado de " +
+      golsCasa +
+      " x " +
+      golsFora +
+      ".";
 
-  } else if (golsFora > golsCasa) {
+  }
+
+  else if(golsFora > golsCasa){
 
     analise =
-      "A estimativa desta página indica maior probabilidade para o visitante, com placar simulado de "
-      + golsCasa + " x " + golsFora + ".";
+      "A estimativa demonstrativa indica " +
+      "vantagem do visitante, com placar " +
+      "simulado de " +
+      golsCasa +
+      " x " +
+      golsFora +
+      ".";
 
-  } else {
+  }
+
+  else{
 
     analise =
-      "A estimativa desta página aponta equilíbrio entre as equipes, com placar simulado de "
-      + golsCasa + " x " + golsFora + ".";
+      "A estimativa demonstrativa aponta " +
+      "equilíbrio entre as equipes, com " +
+      "placar simulado de " +
+      golsCasa +
+      " x " +
+      golsFora +
+      ".";
+
   }
 
 
-  document.getElementById("vitoriaCasa").textContent =
+  document.getElementById(
+    "vitoriaCasa"
+  ).textContent =
     casaProb + "%";
 
-  document.getElementById("empate").textContent =
+
+  document.getElementById(
+    "empate"
+  ).textContent =
     empateProb + "%";
 
-  document.getElementById("vitoriaFora").textContent =
+
+  document.getElementById(
+    "vitoriaFora"
+  ).textContent =
     foraProb + "%";
 
-  document.getElementById("mais15").textContent =
+
+  document.getElementById(
+    "mais15"
+  ).textContent =
     mais15 + "%";
 
-  document.getElementById("mais25").textContent =
+
+  document.getElementById(
+    "mais25"
+  ).textContent =
     mais25 + "%";
 
-  document.getElementById("ambas").textContent =
+
+  document.getElementById(
+    "ambas"
+  ).textContent =
     ambas + "%";
 
-  document.getElementById("totalGols").textContent =
+
+  document.getElementById(
+    "totalGols"
+  ).textContent =
     total + " gols";
 
-  document.getElementById("placar").textContent =
-    golsCasa + " x " + golsFora;
 
-  document.getElementById("tendencia").textContent =
+  document.getElementById(
+    "placar"
+  ).textContent =
+    golsCasa +
+    " x " +
+    golsFora;
+
+
+  document.getElementById(
+    "tendencia"
+  ).textContent =
     tendencia;
 
-  document.getElementById("analise").textContent =
+
+  document.getElementById(
+    "analise"
+  ).textContent =
     analise;
 
 
-  document
-    .getElementById("resultado")
-    .classList.add("show");
+  document.getElementById(
+    "resultado"
+  ).classList.add("show");
 
 
-  document
-    .getElementById("resultado")
-    .scrollIntoView({
-      behavior: "smooth"
-    });
+  document.getElementById(
+    "resultado"
+  ).scrollIntoView({
+    behavior:"smooth"
+  });
 
 }
 
 </script>
 
 </body>
-</html>
+        </html>
