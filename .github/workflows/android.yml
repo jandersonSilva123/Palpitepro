@@ -34,16 +34,13 @@ jobs:
       - name: Preparar projeto
         run: |
           unzip -o -q PalpitePro_Cloud_Build.zip
-          echo "===== ARQUIVOS DO PROJETO ====="
-          find . -path './.git' -prune -o -type f -print | sort
+          echo "Projeto extraido"
 
-            - name: Instalar Gradle
+      - name: Instalar Gradle
         run: |
-          GRADLE_VERSION="9.6.0"
-          echo "Instalando Gradle $GRADLE_VERSION"
-          wget -q "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -O /tmp/gradle.zip
+          wget -q "https://services.gradle.org/distributions/gradle-9.6.0-bin.zip" -O /tmp/gradle.zip
           unzip -q /tmp/gradle.zip -d /tmp
-          echo "/tmp/gradle-${GRADLE_VERSION}/bin" >> "$GITHUB_PATH"
+          echo "/tmp/gradle-9.6.0/bin" >> "$GITHUB_PATH"
 
       - name: Compilar APK
         run: |
@@ -54,4 +51,3 @@ jobs:
         with:
           name: PalpitePro-debug-apk
           path: "app/build/outputs/apk/debug/*.apk"
-        
