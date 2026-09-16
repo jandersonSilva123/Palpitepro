@@ -2,89 +2,483 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>PalpitePro</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#050816;color:white}
-header{text-align:center;padding:28px 15px;background:#101d45}
-h1{margin:0;color:#22c55e;font-size:36px}
-header p{color:#cbd5e1}
-main{max-width:700px;margin:auto;padding:20px}
-.card{background:#10182d;border:1px solid #334155;border-radius:18px;padding:20px;margin-bottom:18px}
-.title{font-size:23px;font-weight:bold;margin-bottom:18px}
-input{width:100%;padding:16px;margin:7px 0;border-radius:10px;border:1px solid #475569;background:#020617;color:white;font-size:17px}
-button{width:100%;padding:17px;margin-top:12px;border:0;border-radius:12px;background:#16a34a;color:white;font-size:18px;font-weight:bold}
-button:active{transform:scale(.98)}
-.result{margin-top:18px;padding:18px;background:#020617;border-radius:12px;line-height:1.8;font-size:17px}
-footer{text-align:center;color:#64748b;padding:30px}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #020617;
+  color: #fff;
+}
+
+header {
+  text-align: center;
+  padding: 28px 15px;
+  background: linear-gradient(135deg, #020b3d, #071d72);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 38px;
+  color: #22c55e;
+}
+
+header p {
+  margin: 8px 0 0;
+  color: #cbd5e1;
+}
+
+main {
+  max-width: 720px;
+  margin: auto;
+  padding: 18px;
+}
+
+.card {
+  background: #071027;
+  border: 1px solid #334155;
+  border-radius: 20px;
+  padding: 22px;
+  margin-bottom: 18px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  margin: 14px 0 6px;
+  color: #cbd5e1;
+  font-weight: bold;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 14px;
+  border-radius: 11px;
+  border: 1px solid #475569;
+  background: #020617;
+  color: white;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 17px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 13px;
+  background: #00a000;
+  color: white;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.match {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.team {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.vs {
+  color: #94a3b8;
+  font-weight: bold;
+}
+
+.result {
+  display: none;
+}
+
+.result.show {
+  display: block;
+}
+
+.stat {
+  margin: 15px 0;
+  padding: 14px;
+  background: #020617;
+  border-radius: 12px;
+}
+
+.stat-title {
+  color: #cbd5e1;
+  margin-bottom: 7px;
+}
+
+.value {
+  font-size: 21px;
+  font-weight: bold;
+  color: #22c55e;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.analysis {
+  line-height: 1.6;
+  color: #dbeafe;
+}
+
+.warning {
+  color: #fbbf24;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 18px;
+}
+
+footer {
+  text-align: center;
+  color: #64748b;
+  padding: 30px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>⚽ PalpitePro</h1>
-<p>Seus palpites esportivos em um só lugar</p>
+  <h1>⚽ PalpitePro</h1>
+  <p>Seus palpites esportivos em um só lugar</p>
 </header>
 
 <main>
 
 <div class="card">
-<div class="title">🎯 Gerar Palpite</div>
 
-<input id="timeA" placeholder="Nome do Time A">
-<input id="timeB" placeholder="Nome do Time B">
+  <div class="title">🎯 Gerar Palpite</div>
 
-<button onclick="gerarPalpite()">GERAR PALPITE</button>
+  <label>Time da casa</label>
+  <input id="timeCasa" placeholder="Ex.: Flamengo">
 
-<div id="resultado" class="result">
-Digite os dois times para começar.
+  <label>Time visitante</label>
+  <input id="timeFora" placeholder="Ex.: Palmeiras">
+
+  <label>📅 Data do jogo</label>
+  <input id="data" type="date">
+
+  <label>🏟️ Local do jogo</label>
+  <select id="local">
+    <option value="casa">Time da casa é mandante</option>
+    <option value="neutro">Campo neutro</option>
+  </select>
+
+  <div class="match">
+    <div class="team" id="nomeCasa">Time da Casa</div>
+    <div class="vs">VS</div>
+    <div class="team" id="nomeFora">Time Visitante</div>
+  </div>
+
+  <button onclick="gerarPalpite()">
+    🎯 GERAR PALPITE
+  </button>
+
+  <div id="erro" class="warning"></div>
+
 </div>
-</div>
 
-<div class="card">
-<div class="title">📊 Informações</div>
 
-<p>Probabilidade: <b id="prob">--</b></p>
-<p>Gols esperados: <b id="gols">--</b></p>
-<p>Resultado sugerido: <b id="placar">--</b></p>
+<div id="resultado" class="card result">
+
+  <div class="title">📊 Análise do Confronto</div>
+
+  <div class="stat">
+    <div class="stat-title">🏠 Vitória do mandante</div>
+    <div class="value" id="vitoriaCasa">--</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">🤝 Empate</div>
+    <div class="value" id="empate">--</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">✈️ Vitória do visitante</div>
+    <div class="value" id="vitoriaFora">--</div>
+  </div>
+
+
+  <div class="grid">
+
+    <div class="stat">
+      <div class="stat-title">⚽ Mais de 1,5 gols</div>
+      <div class="value" id="mais15">--</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">⚽ Mais de 2,5 gols</div>
+      <div class="value" id="mais25">--</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">🥅 Ambas marcam</div>
+      <div class="value" id="ambas">--</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">📈 Total estimado</div>
+      <div class="value" id="totalGols">--</div>
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-title">
+      🎯 Placar sugerido
+    </div>
+
+    <div class="value" id="placar">
+      --
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-title">
+      🔥 Tendência
+    </div>
+
+    <div class="value" id="tendencia">
+      --
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-title">
+      🧠 Análise
+    </div>
+
+    <div class="analysis" id="analise">
+      --
+    </div>
+
+  </div>
+
+
+  <div class="warning">
+    ⚠️ Estas probabilidades são estimativas do modelo desta página e
+    não representam dados oficiais ou garantia de resultado.
+  </div>
 
 </div>
 
 </main>
 
 <footer>
-PalpitePro © 2026
+  PalpitePro © 2026
 </footer>
 
+
 <script>
-function gerarPalpite(){
 
-let a=document.getElementById("timeA").value.trim();
-let b=document.getElementById("timeB").value.trim();
-
-if(!a || !b){
-alert("Digite os dois times.");
-return;
+function numero(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-let prob=Math.floor(Math.random()*21)+60;
-let gols=(Math.random()*2+1).toFixed(1);
 
-let placarA=Math.floor(Math.random()*4);
-let placarB=Math.floor(Math.random()*4);
+function gerarPalpite() {
 
-document.getElementById("prob").textContent=prob+"%";
-document.getElementById("gols").textContent=gols;
-document.getElementById("placar").textContent=
-placarA+" x "+placarB;
+  const casa =
+    document.getElementById("timeCasa").value.trim();
 
-document.getElementById("resultado").innerHTML=
-"⚽ <b>"+a+" x "+b+"</b><br>"+
-"🎯 Palpite gerado com sucesso!<br>"+
-"📌 Resultado sugerido: <b>"+placarA+" x "+placarB+"</b>";
+  const fora =
+    document.getElementById("timeFora").value.trim();
+
+  const data =
+    document.getElementById("data").value;
+
+  const local =
+    document.getElementById("local").value;
+
+  const erro =
+    document.getElementById("erro");
+
+  if (!casa || !fora) {
+
+    erro.textContent =
+      "⚠️ Digite o nome dos dois times.";
+
+    return;
+  }
+
+  if (casa.toLowerCase() === fora.toLowerCase()) {
+
+    erro.textContent =
+      "⚠️ Os times precisam ser diferentes.";
+
+    return;
+  }
+
+  erro.textContent = "";
+
+
+  document.getElementById("nomeCasa").textContent = casa;
+  document.getElementById("nomeFora").textContent = fora;
+
+
+  /*
+   * ESTIMATIVA DEMONSTRATIVA
+   *
+   * Os valores abaixo são gerados pelo
+   * modelo da página e não vêm de uma
+   * base estatística externa.
+   */
+
+
+  let casaProb = numero(45, 65);
+  let foraProb = numero(20, 40);
+
+  if (local === "neutro") {
+    casaProb -= 5;
+    foraProb += 5;
+  }
+
+
+  let empateProb =
+    100 - casaProb - foraProb;
+
+  if (empateProb < 10) {
+    empateProb = 10;
+    casaProb = 100 - empateProb - foraProb;
+  }
+
+
+  let golsCasa = numero(0, 3);
+  let golsFora = numero(0, 3);
+
+  const total =
+    golsCasa + golsFora;
+
+
+  let mais15 =
+    numero(65, 85);
+
+  let mais25 =
+    numero(45, 70);
+
+  let ambas =
+    numero(45, 70);
+
+
+  let tendencia;
+
+
+  if (casaProb >= foraProb && casaProb >= empateProb) {
+
+    tendencia =
+      "Vitória do " + casa;
+
+  } else if (foraProb >= casaProb && foraProb >= empateProb) {
+
+    tendencia =
+      "Vitória do " + fora;
+
+  } else {
+
+    tendencia =
+      "Empate";
+  }
+
+
+  let analise;
+
+
+  if (golsCasa > golsFora) {
+
+    analise =
+      "A estimativa desta página indica maior probabilidade para o mandante, com placar simulado de "
+      + golsCasa + " x " + golsFora + ".";
+
+  } else if (golsFora > golsCasa) {
+
+    analise =
+      "A estimativa desta página indica maior probabilidade para o visitante, com placar simulado de "
+      + golsCasa + " x " + golsFora + ".";
+
+  } else {
+
+    analise =
+      "A estimativa desta página aponta equilíbrio entre as equipes, com placar simulado de "
+      + golsCasa + " x " + golsFora + ".";
+  }
+
+
+  document.getElementById("vitoriaCasa").textContent =
+    casaProb + "%";
+
+  document.getElementById("empate").textContent =
+    empateProb + "%";
+
+  document.getElementById("vitoriaFora").textContent =
+    foraProb + "%";
+
+  document.getElementById("mais15").textContent =
+    mais15 + "%";
+
+  document.getElementById("mais25").textContent =
+    mais25 + "%";
+
+  document.getElementById("ambas").textContent =
+    ambas + "%";
+
+  document.getElementById("totalGols").textContent =
+    total + " gols";
+
+  document.getElementById("placar").textContent =
+    golsCasa + " x " + golsFora;
+
+  document.getElementById("tendencia").textContent =
+    tendencia;
+
+  document.getElementById("analise").textContent =
+    analise;
+
+
+  document
+    .getElementById("resultado")
+    .classList.add("show");
+
+
+  document
+    .getElementById("resultado")
+    .scrollIntoView({
+      behavior: "smooth"
+    });
+
 }
+
 </script>
 
 </body>
