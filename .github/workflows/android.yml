@@ -31,29 +31,8 @@ jobs:
           sdkmanager --install "platforms;android-36"
           sdkmanager --install "build-tools;36.0.0"
 
-            - name: Preparar projeto
-       run: |
-          unzip -o -q PalpitePro_Cloud_Build.zip
-          echo "===== CONTEÚDO EXTRAÍDO ====="
-          find . -maxdepth 4 -type f | sort
-        
-          
-          
-        
-            
-            
-          
-          
-          
-          
-
-      - name: Compilar APK
+      - name: Preparar projeto
         run: |
-          cd "$PROJECT_DIR"
-          ./gradlew assembleDebug --no-daemon
-
-      - name: Disponibilizar APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: PalpitePro-debug-apk
-          path: "**/app/build/outputs/apk/debug/*.apk"
+          unzip -o -q PalpitePro_Cloud_Build.zip
+          echo "===== CONTEUDO EXTRAIDO ====="
+          find . -maxdepth 4 -type f | sort
