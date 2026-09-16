@@ -31,14 +31,17 @@ jobs:
           sdkmanager "platforms;android-36"
           sdkmanager "build-tools;36.0.0"
 
-
-      - name: Dar permissão ao Gradle
-        run: chmod +x gradlew
-
-      - name: Compilar APK
-        run: ./gradlew assembleDebug --no-daemon
-
-      - name: Disponibilizar APK
+      - name: Preparar projeto
+    run: |
+          unzip -q PalpitePro_Cloud_Build.zip -d projeto
+          chmod +x projeto/gradlew
+  
+           - name: Compilar APK
+    run: |
+          cd projeto
+          ./gradlew assembleDebug --no-daemon        
+ 
+          - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
         with:
           name: PalpitePro-debug-apk
