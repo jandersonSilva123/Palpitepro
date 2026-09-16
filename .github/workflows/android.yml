@@ -20,12 +20,21 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      
+      - name: Configurar Android
+        uses: android-actions/setup-android@v4
+        with:
+          packages: ''
+
       - name: Instalar Android SDK
         run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager "platform-tools"
-          sdkmanager "platforms;android-36"
-          sdkmanager "build-tools;36.0.0"
+          sdkmanager --install "platform-tools"
+          sdkmanager --install "platforms;android-36"
+          sdkmanager --install "build-tools;36.0.0" 
+          
+          
+          
+          
 
       - name: Preparar projeto
         run: |
