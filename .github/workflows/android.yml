@@ -21,13 +21,16 @@ jobs:
           java-version: '17'
 
       - name: Configurar Android
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          packages: ''
 
       - name: Instalar Android SDK
         run: |
           sdkmanager "platform-tools"
           sdkmanager "platforms;android-36"
           sdkmanager "build-tools;36.0.0"
+
 
       - name: Dar permissão ao Gradle
         run: chmod +x gradlew
