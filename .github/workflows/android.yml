@@ -21,28 +21,27 @@ jobs:
           java-version: '17'
 
       - name: Configurar Android
-        uses: android-actions/setup-android@v4
-        with:
-          packages: ''
+        uses: android-actions/setup-android@v3
 
       - name: Instalar Android SDK
         run: |
+          yes | sdkmanager --licenses || true
           sdkmanager "platform-tools"
           sdkmanager "platforms;android-36"
           sdkmanager "build-tools;36.0.0"
 
       - name: Preparar projeto
-    run: |
-          unzip -q PalpitePro_Cloud_Build.zip -d projeto
+        run: |
+          unzip -q PalpitePro_Cloud_Build.zip
           chmod +x projeto/gradlew
-  
-           - name: Compilar APK
-    run: |
+
+      - name: Compilar APK
+        run: |
           cd projeto
-          ./gradlew assembleDebug --no-daemon        
- 
-          - name: Disponibilizar APK
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
         with:
           name: PalpitePro-debug-apk
-          path: app/build/outputs/apk/debug/*.apk 
+          path: projeto/app/build/outputs/apk/debug/*.apk
