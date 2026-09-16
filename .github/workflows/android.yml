@@ -31,17 +31,21 @@ jobs:
           sdkmanager --install "platforms;android-36"
           sdkmanager --install "build-tools;36.0.0"
 
-      - name: Preparar projeto
-        run: |
+            - name: Preparar projeto
+       run: |
           unzip -o -q PalpitePro_Cloud_Build.zip
-          GRADLEW_PATH=$(find . -type f -name gradlew | head -1)
-          if [ -z "$GRADLEW_PATH" ]; then
-            echo "gradlew não encontrado no ZIP"
-            exit 1
-          fi
-          PROJECT_DIR=$(dirname "$GRADLEW_PATH")
-          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
-          chmod +x "$GRADLEW_PATH"
+          echo "===== CONTEÚDO EXTRAÍDO ====="
+          find . -maxdepth 4 -type f | sort
+        
+          
+          
+        
+            
+            
+          
+          
+          
+          
 
       - name: Compilar APK
         run: |
