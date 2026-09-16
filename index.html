@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PalpitePro</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#0b1020;color:#fff}
+header{padding:28px 20px;text-align:center;background:linear-gradient(135deg,#111a35,#162b5b)}
+h1{margin:0;font-size:34px;color:#4ade80}
+header p{margin:8px 0 0;color:#cbd5e1}
+main{max-width:700px;margin:auto;padding:20px}
+.card{background:#121a2e;border:1px solid #263556;border-radius:18px;padding:18px;margin-bottom:16px}
+.title{font-size:20px;font-weight:bold;margin-bottom:14px}
+.match{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.team{font-weight:bold;flex:1}
+.team:last-child{text-align:right}
+.vs{color:#94a3b8;font-weight:bold}
+button{width:100%;border:0;border-radius:12px;padding:15px;background:#22c55e;color:#06130a;font-size:17px;font-weight:bold}
+button:active{transform:scale(.98)}
+.result{margin-top:15px;padding:15px;border-radius:12px;background:#0f172a;line-height:1.7}
+footer{text-align:center;color:#64748b;padding:25px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>⚽ PalpitePro</h1>
+<p>Seus palpites esportivos em um só lugar</p>
+</header>
+
+<main>
+<div class="card">
+<div class="title">🎯 Gerar Palpite</div>
+
+<div class="match">
+<div class="team">Time A</div>
+<div class="vs">VS</div>
+<div class="team">Time B</div>
+</div>
+
+<br>
+
+<button onclick="gerarPalpite()">GERAR PALPITE</button>
+
+<div id="resultado" class="result">
+Clique no botão para gerar um palpite.
+</div>
+</div>
+
+<div class="card">
+<div class="title">📊 Informações</div>
+<p>Probabilidade de vitória: <b id="prob">--</b></p>
+<p>Palpite de gols: <b id="gols">--</b></p>
+<p>Resultado sugerido: <b id="placar">--</b></p>
+</div>
+</main>
+
+<footer>
+PalpitePro © 2026
+</footer>
+
+<script>
+function gerarPalpite(){
+ const prob=Math.floor(Math.random()*31)+55;
+ const gols=(Math.random()*2+1).toFixed(1);
+ const a=Math.floor(Math.random()*4);
+ const b=Math.floor(Math.random()*4);
+
+ document.getElementById("prob").textContent=prob+"%";
+ document.getElementById("gols").textContent=gols;
+ document.getElementById("placar").textContent=a+" x "+b;
+ document.getElementById("resultado").innerHTML=
+ "✅ <b>Palpite gerado!</b><br>Analise os dados antes de tomar qualquer decisão.";
+}
+</script>
+
+</body>
+</html>
