@@ -20,7 +20,6 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      
       - name: Configurar Android
         uses: android-actions/setup-android@v4
         with:
@@ -30,14 +29,10 @@ jobs:
         run: |
           sdkmanager --install "platform-tools"
           sdkmanager --install "platforms;android-36"
-          sdkmanager --install "build-tools;36.0.0" 
-          
-          
-          
-          
+          sdkmanager --install "build-tools;36.0.0"
 
-          - name: Preparar projeto
-         run: |
+      - name: Preparar projeto
+        run: |
           unzip -o -q PalpitePro_Cloud_Build.zip
           GRADLEW_PATH=$(find . -type f -name gradlew | head -1)
           if [ -z "$GRADLEW_PATH" ]; then
@@ -52,17 +47,9 @@ jobs:
         run: |
           cd "$PROJECT_DIR"
           ./gradlew assembleDebug --no-daemon
-        
-          
-          
-
-      
-        
-          
-          
 
       - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
         with:
           name: PalpitePro-debug-apk
-          path: projeto/app/build/outputs/apk/debug/*.apk
+          path: "**/app/build/outputs/apk/debug/*.apk"
