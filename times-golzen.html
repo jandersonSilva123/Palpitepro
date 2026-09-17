@@ -139,9 +139,52 @@ function escapeHtml(text){
 
 async function loadTeams(){
   const c = country.value;
-  statusBox.textContent = "⏳ Carregando times...";
+  statusBox.textContent = "⏳ Carregando principais times...";
   teamsBox.innerHTML = '<div class="empty">Buscando clubes...</div>';
   allTeams = [];
+
+  const principais = {
+    Brazil: [
+      "Flamengo","Palmeiras","Corinthians","São Paulo","Santos",
+      "Fluminense","Vasco da Gama","Botafogo","Grêmio","Internacional",
+      "Cruzeiro","Atlético Mineiro","Bahia","Fortaleza"
+    ],
+    Argentina: [
+      "River Plate","Boca Juniors","Racing Club","Independiente",
+      "San Lorenzo","Estudiantes"
+    ],
+    England: [
+      "Manchester City","Manchester United","Liverpool","Arsenal",
+      "Chelsea","Tottenham","Newcastle United","Aston Villa",
+      "West Ham United","Everton"
+    ],
+    Spain: [
+      "Real Madrid","Barcelona","Atlético Madrid","Sevilla",
+      "Valencia","Villarreal","Athletic Club","Real Sociedad"
+    ],
+    Italy: [
+      "Juventus","Inter","Milan","Napoli","Roma",
+      "Lazio","Atalanta","Fiorentina"
+    ],
+    Germany: [
+      "Bayern Munich","Borussia Dortmund","RB Leipzig",
+      "Bayer Leverkusen","Schalke 04","Eintracht Frankfurt"
+    ],
+    France: [
+      "Paris Saint-Germain","Marseille","Lyon","Monaco",
+      "Lille","Nice"
+    ],
+    Portugal: [
+      "Benfica","Porto","Sporting CP","Braga","Boavista"
+    ],
+    Netherlands: [
+      "Ajax","PSV Eindhoven","Feyenoord","AZ Alkmaar"
+    ],
+    "United States": [
+      "Inter Miami","LA Galaxy","Los Angeles FC",
+      "Seattle Sounders","New York City FC"
+    ]
+  
 
   try{
     const url =
@@ -152,7 +195,29 @@ async function loadTeams(){
     if(!response.ok) throw new Error("HTTP " + response.status);
 
     const data = await response.json();
-    allTeams = Array.isArray(data.teams) ? data.teams : [];
+    const teams = Array.isArray(data.teams) ? data.teams : [];
+
+    const nomes = principais[c] || [];
+
+    allTeams = teams
+      .filter(t => t && t.strTeam)
+      .filter((t, i, arr) =>
+        arr.findIndex(x => x.strTeam === t.strTeam) === i
+      )
+      .sort((a,b) => {
+        const ia = nomes.findIndex(n =>
+          n.toLowerCase() === a.strTeam.toLowerCase()
+        );
+        const ib = nomes.findIndex(n =>
+          n.toLowerCase() === b.strTeam.toLowerCase()
+        );
+
+        if(ia !== -1 && ib === -1) return -1;
+        if(ia === -1 && ib !== -1) return 1;
+        if(ia !== -1 && ib !== -1) return ia - ib;
+
+        return a.strTeam.localeCompare(b.strTeam);
+      });
 
     statusBox.textContent =
       allTeams.length
@@ -160,12 +225,15 @@ async function loadTeams(){
         : `⚠️ Nenhum time encontrado para ${c}.`;
 
     renderTeams();
+
   }catch(error){
+    console.error(error);
     statusBox.textContent =
-      "❌ Não foi possível carregar os times agora. Tente novamente.";
+      "❌ Não foi possível carregar os times agora.";
     teamsBox.innerHTML =
       '<div class="empty">Verifique sua internet e tente novamente.</div>';
   }
+                                         
 }
 
 loadBtn.addEventListener("click", loadTeams);
