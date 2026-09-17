@@ -771,35 +771,56 @@ footer strong{
       </div>
 
     </div>
+<div class="game" style="position:relative;overflow:hidden;">
 
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+    <div class="league">🏴 PREMIER LEAGUE</div>
 
-    <div class="game">
-
-      <div class="league">
-        🏴 Premier League
-      </div>
-
-      <div class="teams">
-
-        <div class="team">
-          Arsenal
-        </div>
-
-        <div class="vs">
-          VS
-        </div>
-
-        <div class="team">
-          Liverpool
-        </div>
-
-      </div>
-
-      <div class="game-tip">
-        🎯 Exemplo: análise do confronto
-      </div>
-
+    <div style="font-size:10px;color:#39ff68;background:#082c18;padding:6px 9px;border-radius:20px;">
+      DESTAQUE
     </div>
+  </div>
+
+  <div style="text-align:center;color:#7f9088;font-size:12px;margin-bottom:18px;">
+    📅 Jogo demonstrativo • 21:30
+  </div>
+
+  <div class="teams">
+
+    <div style="text-align:center;">
+      <div style="font-size:32px;margin-bottom:8px;">🔴⚪</div>
+      <div class="team">Arsenal</div>
+    </div>
+
+    <div>
+      <div class="vs" style="font-size:14px;">VS</div>
+    </div>
+
+    <div style="text-align:center;">
+      <div style="font-size:32px;margin-bottom:8px;">🔴⚪</div>
+      <div class="team">Liverpool</div>
+    </div>
+
+  </div>
+
+  <div class="game-tip">
+    🎯 Análise disponível
+  </div>
+
+  <button
+    class="btn"
+    style="width:100%;margin-top:12px;padding:12px;font-size:14px;"
+    onclick="
+      document.getElementById('timeCasa').value='Arsenal';
+      document.getElementById('timeFora').value='Liverpool';
+      document.getElementById('palpites').scrollIntoView({behavior:'smooth'});
+    ">
+    🔎 Ver análise
+  </button>
+
+</div>
+
+    
 
 
   </div>
