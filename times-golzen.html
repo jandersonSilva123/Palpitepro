@@ -487,7 +487,12 @@ resultados.map(clube => `
 <div class="team">
 
 <div class="badge">
-⚽
+  <img
+    src=""
+    data-time="${clube[0]}"
+    alt="${clube[0]}"
+    class="team-logo"
+  >
 </div>
 
 <strong>
@@ -502,10 +507,47 @@ ${clube[1]} • ${clube[2]}
 
 `).join("");
 
+  carregarEscudos();
 }
 
 
-/* PESQUISA AUTOMÁTICA */
+async function carregarEscudos(){
+  const imagens = document.querySelectorAll(".team-logo");
+
+  const observador = new IntersectionObserver(async (entradas) => {
+    for(const entrada of entradas){
+      if(!entrada.isIntersecting) continue;
+
+      const img = entrada.target;
+      if(img.dataset.carregado) continue;
+
+      img.dataset.carregado = "true";
+
+      try{
+        const nome = img.dataset.time;
+
+        const resposta = await fetch(
+          "https://www.thesportsdb.com/api/v1/json/123/searchteams.php?t=" +
+          encodeURIComponent(nome)
+        );
+
+        const dados = await resposta.json();
+
+        if(dados.teams && dados.teams[0] && dados.teams[0].strBadge){
+          img.src = dados.teams[0].strBadge;
+        }
+      }catch(e){
+        console.log("Erro ao carregar escudo:", e);
+      }
+
+      observador.unobserve(img);
+    }
+  }, {
+    rootMargin: "200px"
+  });
+
+  imagens.forEach(img => observador.observe(img));
+  }/* PESQUISA AUTOMÁTICA */
 
 search.addEventListener(
 "input",
