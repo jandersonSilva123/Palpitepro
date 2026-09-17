@@ -624,245 +624,24 @@ footer strong{
   <div class="section-title">
 
     <h2>
-      ⚽ Jogos em <span>Destaque</span>
+      ⚽ Jogos de <span>Hoje</span>
     </h2>
 
-    <small>Confrontos demonstrativos</small>
+    <small id="atualizacaoJogos">
+      Buscando jogos reais...
+    </small>
 
   </div>
 
+  <div id="jogosLista" class="games">
 
-  <div class="game" style="position:relative;overflow:hidden;">
-
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-    <div class="league">🇧🇷 BRASILEIRÃO SÉRIE A</div>
-
-    <div style="font-size:10px;color:#39ff68;background:#082c18;padding:6px 9px;border-radius:20px;">
-      DESTAQUE
-    </div>
-  </div>
-
-  <div style="text-align:center;color:#7f9088;font-size:12px;margin-bottom:18px;">
-    📅 Horário do jogo • 21:30
-  </div>
-
-  <div class="teams">
-
-    <div style="text-align:center;">
-      <img
-        src="https://a.espncdn.com/i/teamlogos/soccer/500/819.png"
-        alt="Flamengo"
-        style="width:55px;height:55px;object-fit:contain;margin-bottom:8px;">
-      <div class="team">Flamengo</div>
-      <div style="font-size:10px;color:#7f9088;margin-top:4px;">🏠 CASA</div>
-    </div>
-
-    <div>
-      <div class="vs" style="font-size:14px;">VS</div>
-      <div style="font-size:12px;color:#39ff68;margin-top:5px;">21:30</div>
-    </div>
-
-    <div style="text-align:center;">
-      <img
-        src="https://a.espncdn.com/i/teamlogos/soccer/500/2029.png"
-        alt="Palmeiras"
-        style="width:55px;height:55px;object-fit:contain;margin-bottom:8px;">
-      <div class="team">Palmeiras</div>
-      <div style="font-size:10px;color:#7f9088;margin-top:4px;">✈️ FORA</div>
+    <div class="card" style="grid-column:1/-1;text-align:center;">
+      ⚽ Carregando jogos reais...
     </div>
 
   </div>
 
- <div class="game" style="position:relative;overflow:hidden;">
-
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-    <div class="league">🏆 COPA LIBERTADORES</div>
-
-    <div style="font-size:10px;color:#39ff68;background:#082c18;padding:6px 9px;border-radius:20px;">
-      HOJE
-    </div>
-  </div>
-
-  <div style="text-align:center;color:#7f9088;font-size:12px;margin-bottom:18px;">
-    📅 17/09/2026 • 21:30
-  </div>
-
-  <div class="teams">
-
-    <div style="text-align:center;">
-      <img
-        src="https://a.espncdn.com/i/teamlogos/soccer/500/819.png"
-        alt="Flamengo"
-        style="width:55px;height:55px;object-fit:contain;margin-bottom:8px;">
-      <div class="team">Flamengo</div>
-      <div style="font-size:10px;color:#7f9088;margin-top:4px;">🏠 CASA</div>
-    </div>
-
-    <div>
-      <div class="vs" style="font-size:14px;">VS</div>
-      <div style="font-size:12px;color:#39ff68;margin-top:5px;">21:30</div>
-    </div>
-
-    <div style="text-align:center;">
-      <img
-        src="https://a.espncdn.com/i/teamlogos/soccer/500/17086.png"
-        alt="Independiente del Valle"
-        style="width:55px;height:55px;object-fit:contain;margin-bottom:8px;">
-      <div class="team">Independiente del Valle</div>
-      <div style="font-size:10px;color:#7f9088;margin-top:4px;">✈️ FORA</div>
-    </div>
-
-  </div>
-
-  <div class="game-tip">
-    ⚽ Jogo confirmado
-  </div>
-
-  <button
-    class="btn"
-    style="width:100%;margin-top:12px;padding:12px;font-size:14px;"
-    onclick="
-      document.getElementById('timeCasa').value='Flamengo';
-      document.getElementById('timeFora').value='Independiente del Valle';
-      document.getElementById('palpites').scrollIntoView({behavior:'smooth'});
-    "
-  >
-    🔎 Ver análise
-  </button>
-
-</div>
-
-    
-      <div class="game" style="position:relative;overflow:hidden;">
-
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-    <div class="league">🏆 CHAMPIONS LEAGUE</div>
-
-    <div style="font-size:10px;color:#39ff68;background:#082c18;padding:6px 9px;border-radius:20px;">
-      DESTAQUE
-    </div>
-  </div>
-
-  <div style="text-align:center;color:#7f9088;font-size:12px;margin-bottom:18px;">
-    📅 Horário do jogo • 21:30
-  </div>
-
-  <div class="teams">
-
-    <div style="text-align:center;">
-      <img
-        src="https://a.espncdn.com/i/teamlogos/soccer/500/86.png"
-        style="width:55px;height:55px;object-fit:contain;margin-bottom:8px;">
-      <div class="team">Real Madrid</div>
-      <div style="font-size:10px;color:#7f9088;margin-top:4px;">🏠 CASA</div>
-    </div>
-
-    <div>
-      <div class="vs" style="font-size:14px;">VS</div>
-      <div style="font-size:12px;color:#39ff68;margin-top:5px;">21:30</div>
-    </div>
-
-    <div style="text-align:center;">
-      <img
-        src="https://a.espncdn.com/i/teamlogos/soccer/500/382.png"
-        style="width:55px;height:55px;object-fit:contain;margin-bottom:8px;">
-      <div class="team">Man. City</div>
-      <div style="font-size:10px;color:#7f9088;margin-top:4px;">✈️ FORA</div>
-    </div>
-
-  </div>
-
-  <div class="game-tip">
-    🎯 Palpite demonstrativo: Real Madrid vence
-  </div>
-
-  <div style="text-align:center;margin-top:12px;font-size:12px;color:#39ff68;">
-    🔥 Tendência Alta
-  </div>
-
-  <div style="text-align:center;margin-top:8px;font-size:11px;color:#7f9088;">
-    📊 Confiança demonstrativa: 64%
-  </div>
-
-  <button
-    class="btn"
-    style="width:100%;margin-top:12px;padding:12px;font-size:14px;"
-    onclick="
-      document.getElementById('timeCasa').value='Real Madrid';
-      document.getElementById('timeFora').value='Man. City';
-      document.getElementById('palpites').scrollIntoView({behavior:'smooth'});
-    "
-  >
-    🔎 Ver análise
-  </button>
-
-</div>
-        
-        
-  <div class="game" style="position:relative;overflow:hidden;">
-
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-    <div class="league">🏴 PREMIER LEAGUE</div>
-
-    <div style="font-size:10px;color:#39ff68;background:#082c18;padding:6px 9px;border-radius:20px;">
-      DESTAQUE
-    </div>
-  </div>
-
-  <div style="text-align:center;color:#7f9088;font-size:12px;margin-bottom:18px;">
-    📅 Horário do jogo • 21:30
-  </div>
-
-  <div class="teams">
-
-    <div style="text-align:center;">
-      <img
-        src="https://a.espncdn.com/i/teamlogos/soccer/500/359.png"
-        style="width:55px;height:55px;object-fit:contain;margin-bottom:8px;">
-      <div class="team">Arsenal</div>
-      <div style="font-size:10px;color:#7f9088;margin-top:4px;">🏠 CASA</div>
-    </div>
-
-    <div>
-      <div class="vs" style="font-size:14px;">VS</div>
-      <div style="font-size:12px;color:#39ff68;margin-top:5px;">21:30</div>
-    </div>
-
-    <div style="text-align:center;">
-      <img
-        src="https://a.espncdn.com/i/teamlogos/soccer/500/364.png"
-        style="width:55px;height:55px;object-fit:contain;margin-bottom:8px;">
-      <div class="team">Liverpool</div>
-      <div style="font-size:10px;color:#7f9088;margin-top:4px;">✈️ FORA</div>
-    </div>
-
-  </div>
-
-  <div class="game-tip">
-    🎯 Palpite demonstrativo: Arsenal vence
-  </div>
-
-  <div style="text-align:center;margin-top:12px;font-size:12px;color:#39ff68;">
-    🔥 Tendência Alta
-  </div>
-
-  <div style="text-align:center;margin-top:8px;font-size:11px;color:#7f9088;">
-    📊 Confiança demonstrativa: 62%
-  </div>
-
-  <button
-    class="btn"
-    style="width:100%;margin-top:12px;padding:12px;font-size:14px;"
-    onclick="
-      document.getElementById('timeCasa').value='Arsenal';
-      document.getElementById('timeFora').value='Liverpool';
-      document.getElementById('palpites').scrollIntoView({behavior:'smooth'});
-    "
-  >
-    🔎 Ver análise
-  </button>
-
-</div>        
+</section>        
         
 
       
@@ -1776,7 +1555,602 @@ catch(erroAPI){
 
 }
 
+      }// ======================================================
+// GOLZEN - JOGOS REAIS DO DIA
+// ======================================================
+
+const API_GOLZEN =
+  "https://palpitepro-virid.vercel.app/api/football";
+
+function dataHoje() {
+
+  const agora = new Date();
+
+  const ano = agora.getFullYear();
+
+  const mes = String(agora.getMonth() + 1)
+    .padStart(2, "0");
+
+  const dia = String(agora.getDate())
+    .padStart(2, "0");
+
+  return `${ano}-${mes}-${dia}`;
+
+}
+
+
+function horarioBrasil(dataISO) {
+
+  if (!dataISO) return "--:--";
+
+  try {
+
+    return new Date(dataISO).toLocaleTimeString(
+      "pt-BR",
+      {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "America/Sao_Paulo"
       }
+    );
+
+  } catch {
+
+    return "--:--";
+
+  }
+
+}
+
+
+function dataBrasil(dataISO) {
+
+  if (!dataISO) return "";
+
+  try {
+
+    return new Date(dataISO).toLocaleDateString(
+      "pt-BR",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        timeZone: "America/Sao_Paulo"
+      }
+    );
+
+  } catch {
+
+    return "";
+
+  }
+
+}
+
+
+function statusJogo(status) {
+
+  if (!status) return "AGENDADO";
+
+  const codigo = status.short;
+
+  const mapa = {
+
+    NS: "AGENDADO",
+
+    "1H": "AO VIVO",
+
+    HT: "INTERVALO",
+
+    "2H": "AO VIVO",
+
+    ET: "PRORROGAÇÃO",
+
+    P: "PÊNALTIS",
+
+    FT: "ENCERRADO",
+
+    AET: "ENCERRADO",
+
+    PEN: "ENCERRADO",
+
+    PST: "ADIADO",
+
+    CANC: "CANCELADO",
+
+    ABD: "ABANDONADO"
+
+  };
+
+  return mapa[codigo] || status.long || "AGENDADO";
+
+}
+
+
+function classeStatus(status) {
+
+  const codigo = status?.short;
+
+  if (
+    codigo === "1H" ||
+    codigo === "2H" ||
+    codigo === "ET" ||
+    codigo === "P"
+  ) {
+
+    return "AO VIVO";
+
+  }
+
+  if (
+    codigo === "FT" ||
+    codigo === "AET" ||
+    codigo === "PEN"
+  ) {
+
+    return "ENCERRADO";
+
+  }
+
+  return "AGENDADO";
+
+}
+
+
+function criarJogo(fixture) {
+
+  const home = fixture.teams.home;
+
+  const away = fixture.teams.away;
+
+  const liga = fixture.league;
+
+  const info = fixture.fixture;
+
+  const status = statusJogo(info.status);
+
+  const classe = classeStatus(info.status);
+
+  const hora = horarioBrasil(info.date);
+
+  const data = dataBrasil(info.date);
+
+  let placar = "";
+
+  if (
+    info.status &&
+    info.status.short !== "NS" &&
+    fixture.goals
+  ) {
+
+    const golsCasa =
+      fixture.goals.home ?? 0;
+
+    const golsFora =
+      fixture.goals.away ?? 0;
+
+    placar =
+      `<div style="
+        margin-top:8px;
+        font-size:22px;
+        color:#39ff68;
+        font-weight:900;
+      ">
+        ${golsCasa} × ${golsFora}
+      </div>`;
+
+  }
+
+
+  const card = document.createElement("div");
+
+  card.className = "game";
+
+
+  card.innerHTML = `
+
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:15px;
+    ">
+
+      <div class="league">
+
+        ${liga.logo
+          ? `<img
+              src="${liga.logo}"
+              style="
+                width:22px;
+                height:22px;
+                object-fit:contain;
+                vertical-align:middle;
+                margin-right:5px;
+              "
+              onerror="this.style.display='none'"
+            >`
+          : ""
+        }
+
+        ${liga.name || "Futebol"}
+
+      </div>
+
+      <div style="
+        font-size:10px;
+        color:#39ff68;
+        background:#082c18;
+        padding:6px 9px;
+        border-radius:20px;
+        white-space:nowrap;
+      ">
+
+        ${classe}
+
+      </div>
+
+    </div>
+
+
+    <div style="
+      text-align:center;
+      color:#7f9088;
+      font-size:12px;
+      margin-bottom:18px;
+    ">
+
+      📅 ${data} • ${hora}
+
+    </div>
+
+
+    <div class="teams">
+
+
+      <div style="text-align:center;">
+
+        <img
+          src="${home.logo || ""}"
+          alt="${home.name}"
+          style="
+            width:55px;
+            height:55px;
+            object-fit:contain;
+            margin-bottom:8px;
+          "
+          onerror="this.style.display='none'"
+        >
+
+        <div class="team">
+          ${home.name}
+        </div>
+
+        <div style="
+          font-size:10px;
+          color:#7f9088;
+          margin-top:4px;
+        ">
+          🏠 CASA
+        </div>
+
+      </div>
+
+
+      <div>
+
+        <div class="vs" style="font-size:14px;">
+          VS
+        </div>
+
+        ${placar}
+
+      </div>
+
+
+      <div style="text-align:center;">
+
+        <img
+          src="${away.logo || ""}"
+          alt="${away.name}"
+          style="
+            width:55px;
+            height:55px;
+            object-fit:contain;
+            margin-bottom:8px;
+          "
+          onerror="this.style.display='none'"
+        >
+
+        <div class="team">
+          ${away.name}
+        </div>
+
+        <div style="
+          font-size:10px;
+          color:#7f9088;
+          margin-top:4px;
+        ">
+          ✈️ FORA
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="game-tip">
+
+      ⚽ ${liga.name || "Partida"}
+
+    </div>
+
+
+    <button
+      class="btn"
+      style="
+        width:100%;
+        margin-top:12px;
+        padding:12px;
+        font-size:14px;
+      "
+      onclick="selecionarJogo(
+        '${String(home.name).replace(/'/g, "\\'")}',
+        '${String(away.name).replace(/'/g, "\\'")}'
+      )"
+    >
+
+      🔎 Ver análise
+
+    </button>
+
+  `;
+
+
+  return card;
+
+}
+
+
+function selecionarJogo(casa, fora) {
+
+  document.getElementById("timeCasa").value =
+    casa;
+
+  document.getElementById("timeFora").value =
+    fora;
+
+  atualizarTimes();
+
+  document
+    .getElementById("palpites")
+    .scrollIntoView({
+      behavior: "smooth"
+    });
+
+}
+
+
+async function carregarJogos() {
+
+  const lista =
+    document.getElementById("jogosLista");
+
+  const atualizacao =
+    document.getElementById("atualizacaoJogos");
+
+
+  lista.innerHTML = `
+
+    <div class="card"
+      style="
+        grid-column:1/-1;
+        text-align:center;
+      ">
+
+      ⚽ Buscando jogos reais de hoje...
+
+    </div>
+
+  `;
+
+
+  try {
+
+    const data =
+      dataHoje();
+
+
+    const resposta =
+      await fetch(
+        API_GOLZEN +
+        "?endpoint=fixtures" +
+        "&date=" +
+        data +
+        "&timezone=America/Sao_Paulo"
+      );
+
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        "Erro HTTP " + resposta.status
+      );
+
+    }
+
+
+    const dados =
+      await resposta.json();
+
+
+    if (
+      dados.errors &&
+      Object.keys(dados.errors).length
+    ) {
+
+      throw new Error(
+        JSON.stringify(dados.errors)
+      );
+
+    }
+
+
+    let jogos =
+      dados.response || [];
+
+
+    // Remove partidas canceladas/adiadas
+    jogos =
+      jogos.filter(jogo => {
+
+        const codigo =
+          jogo.fixture?.status?.short;
+
+        return codigo !== "CANC";
+
+      });
+
+
+    // Ordena pelo horário
+    jogos.sort((a, b) => {
+
+      return (
+        new Date(a.fixture.date) -
+        new Date(b.fixture.date)
+      );
+
+    });
+
+
+    lista.innerHTML = "";
+
+
+    if (!jogos.length) {
+
+      lista.innerHTML = `
+
+        <div class="card"
+          style="
+            grid-column:1/-1;
+            text-align:center;
+          ">
+
+          <div style="
+            font-size:40px;
+            margin-bottom:10px;
+          ">
+            ⚽
+          </div>
+
+          <strong>
+            Nenhum jogo encontrado hoje.
+          </strong>
+
+          <p style="
+            color:#7f9088;
+            margin-top:8px;
+          ">
+            Tente novamente mais tarde.
+          </p>
+
+          <button
+            class="btn"
+            style="margin-top:15px;"
+            onclick="carregarJogos()"
+          >
+            🔄 Atualizar
+          </button>
+
+        </div>
+
+      `;
+
+      atualizacao.textContent =
+        "Atualizado agora";
+
+      return;
+
+    }
+
+
+    // Mostra até 30 partidas
+    jogos
+      .slice(0, 30)
+      .forEach(jogo => {
+
+        lista.appendChild(
+          criarJogo(jogo)
+        );
+
+      });
+
+
+    atualizacao.textContent =
+      `${jogos.length} jogos encontrados • atualizado agora`;
+
+
+  } catch (erro) {
+
+    console.error(erro);
+
+
+    lista.innerHTML = `
+
+      <div class="card"
+        style="
+          grid-column:1/-1;
+          text-align:center;
+        ">
+
+        <div style="
+          font-size:40px;
+          margin-bottom:10px;
+        ">
+          ⚠️
+        </div>
+
+        <strong>
+          Não foi possível carregar os jogos.
+        </strong>
+
+        <p style="
+          color:#7f9088;
+          margin-top:8px;
+          line-height:1.6;
+        ">
+          Verifique a conexão com a API-Football.
+        </p>
+
+        <button
+          class="btn"
+          style="margin-top:15px;"
+          onclick="carregarJogos()"
+        >
+          🔄 Tentar novamente
+        </button>
+
+      </div>
+
+    `;
+
+    atualizacao.textContent =
+      "Erro ao atualizar";
+
+  }
+
+}
+
+
+// Carrega os jogos quando a página abre
+carregarJogos();
+
+
+// Atualiza automaticamente a cada 5 minutos
+setInterval(
+  carregarJogos,
+  5 * 60 * 1000
+);
 
     
 
