@@ -3,246 +3,706 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>GolZen - Banco de Times</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
 body{
   font-family:Arial,Helvetica,sans-serif;
-  background:radial-gradient(circle at top,#092719 0%,#030706 42%);
-  color:#fff;min-height:100vh;padding:20px;
+  background:radial-gradient(circle at top,#092719,#030706 55%);
+  color:#fff;
+  min-height:100vh;
+  padding:20px;
 }
-.wrap{max-width:1100px;margin:auto}
+
+.wrap{
+  max-width:1100px;
+  margin:auto;
+}
+
 header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 0 25px;border-bottom:1px solid #173b29;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 0 25px;
+  border-bottom:1px solid #173b29;
 }
-.logo{font-size:28px;font-weight:900;color:#39ff68}
-.logo span{color:#fff}
-.back{color:#39ff68;text-decoration:none;font-weight:bold}
+
+.logo{
+  font-size:28px;
+  font-weight:900;
+  color:#39ff68;
+}
+
+.logo span{
+  color:#fff;
+}
+
+.back{
+  color:#39ff68;
+  text-decoration:none;
+  font-weight:bold;
+}
+
 .card{
-  margin-top:25px;padding:22px;border:1px solid #173b29;
-  border-radius:20px;background:linear-gradient(145deg,#0a1912,#06100c);
+  margin-top:25px;
+  padding:22px;
+  border:1px solid #173b29;
+  border-radius:20px;
+  background:#06100c;
 }
-h1{font-size:27px;margin-bottom:8px}
-.sub{color:#94a3a8;line-height:1.6;margin-bottom:20px}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-label{display:block;color:#cbd5d1;font-size:13px;font-weight:bold;margin-bottom:7px}
-select,input{
-  width:100%;padding:14px;border-radius:11px;border:1px solid #254b36;
-  background:#030806;color:#fff;font-size:15px;outline:none;
+
+h1{
+  font-size:27px;
+  margin-bottom:8px;
 }
+
+.sub{
+  color:#94a3a8;
+  line-height:1.6;
+  margin-bottom:20px;
+}
+
+.controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+label{
+  display:block;
+  color:#cbd5d1;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+select,
+input{
+  width:100%;
+  padding:14px;
+  border-radius:11px;
+  border:1px solid #254b36;
+  background:#030806;
+  color:#fff;
+  font-size:15px;
+}
+
 button{
-  margin-top:15px;width:100%;padding:14px;border:0;border-radius:12px;
-  background:#39ff68;color:#001508;font-weight:900;font-size:15px;cursor:pointer;
+  margin-top:15px;
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:12px;
+  background:#00d819;
+  color:#001508;
+  font-weight:900;
+  font-size:16px;
 }
-.status{margin-top:15px;color:#94a3a8;font-size:13px}
+
+.status{
+  margin-top:15px;
+  color:#94a3a8;
+  font-size:14px;
+}
+
+.liga{
+  margin-top:22px;
+  color:#39ff68;
+  font-size:19px;
+  font-weight:900;
+}
+
 .grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-top:15px;
 }
+
 .team{
-  padding:16px;text-align:center;border:1px solid #173b29;border-radius:15px;
-  background:#030806;transition:.2s;
+  padding:16px;
+  text-align:center;
+  border:1px solid #173b29;
+  border-radius:15px;
+  background:#030806;
 }
-.team:hover{transform:translateY(-3px);border-color:#39ff68}
-.team img{width:68px;height:68px;object-fit:contain;margin:5px auto 10px;display:block}
-.team strong{display:block;font-size:14px}
-.team small{display:block;color:#7f9088;margin-top:5px}
-.empty{grid-column:1/-1;text-align:center;padding:30px;color:#94a3a8}
+
+.team img{
+  width:75px;
+  height:75px;
+  object-fit:contain;
+  margin:5px auto 10px;
+  display:block;
+}
+
+.team strong{
+  display:block;
+  font-size:14px;
+}
+
+.team small{
+  display:block;
+  color:#7f9088;
+  margin-top:5px;
+}
+
+.empty{
+  grid-column:1/-1;
+  text-align:center;
+  padding:30px;
+  color:#94a3a8;
+}
+
 .note{
-  margin-top:18px;padding:12px;border-radius:10px;background:#241d05;
-  border:1px solid #4b3c0b;color:#facc15;font-size:12px;line-height:1.6
+  margin-top:18px;
+  padding:12px;
+  border-radius:10px;
+  background:#241d05;
+  border:1px solid #4b3c0b;
+  color:#facc15;
+  font-size:12px;
+  line-height:1.6;
 }
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:520px){.controls{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}
+
+@media(max-width:800px){
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:520px){
+  .controls{
+    grid-template-columns:1fr;
+  }
+
+  .grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
+
 <header>
   <div class="logo">⚽ Gol<span>Zen</span></div>
   <a class="back" href="index.html">← Voltar</a>
 </header>
 
 <section class="card">
-  <h1>🌎 Banco de Times</h1>
-  <p class="sub">Escolha um país para carregar clubes e seus escudos. Depois use a busca para encontrar um time.</p>
 
-  <div class="controls">
-    <div>
-      <label for="country">País</label>
-      <select id="country">
-        <option value="Brazil">🇧🇷 Brasil</option>
-        <option value="Argentina">🇦🇷 Argentina</option>
-        <option value="England">🏴 Inglaterra</option>
-        <option value="Spain">🇪🇸 Espanha</option>
-        <option value="Italy">🇮🇹 Itália</option>
-        <option value="Germany">🇩🇪 Alemanha</option>
-        <option value="France">🇫🇷 França</option>
-        <option value="Portugal">🇵🇹 Portugal</option>
-        <option value="Netherlands">🇳🇱 Holanda</option>
-        <option value="United States">🇺🇸 Estados Unidos</option>
-      </select>
-    </div>
-    <div>
-      <label for="search">Buscar time</label>
-      <input id="search" type="search" placeholder="Ex.: Flamengo">
-    </div>
-  </div>
+<h1>🌎 Banco de Times</h1>
 
-  <button id="loadBtn">🔎 Carregar times</button>
-  <div id="status" class="status">Selecione um país e toque em “Carregar times”.</div>
-  <div id="teams" class="grid">
-    <div class="empty">Os times aparecerão aqui.</div>
-  </div>
+<p class="sub">
+Escolha um país para carregar os principais clubes da principal liga.
+</p>
 
-  <div class="note">
-    ℹ️ Esta primeira versão usa a API gratuita do TheSportsDB para consultar clubes e escudos.
-    O serviço possui limites de uso na versão gratuita.
-  </div>
+<div class="controls">
+
+<div>
+<label for="country">País</label>
+
+<select id="country">
+
+<option value="Brazil">🇧🇷 Brasil</option>
+<option value="Argentina">🇦🇷 Argentina</option>
+<option value="England">🏴 Inglaterra</option>
+<option value="Spain">🇪🇸 Espanha</option>
+<option value="Italy">🇮🇹 Itália</option>
+<option value="Germany">🇩🇪 Alemanha</option>
+<option value="France">🇫🇷 França</option>
+<option value="Portugal">🇵🇹 Portugal</option>
+<option value="Netherlands">🇳🇱 Holanda</option>
+<option value="United States">🇺🇸 Estados Unidos</option>
+
+</select>
+</div>
+
+<div>
+
+<label for="search">Buscar time</label>
+
+<input
+id="search"
+type="search"
+placeholder="Ex.: Flamengo">
+
+</div>
+
+</div>
+
+<button id="loadBtn">
+🔎 Carregar principais times
+</button>
+
+<div id="status" class="status">
+Escolha um país e carregue os times.
+</div>
+
+<div id="liga" class="liga"></div>
+
+<div id="teams" class="grid">
+
+<div class="empty">
+Os clubes aparecerão aqui.
+</div>
+
+</div>
+
+<div class="note">
+ℹ️ O GolZen consulta os clubes diretamente pela principal liga de cada país.
+</div>
+
 </section>
 </div>
 
 <script>
-const country = document.getElementById("country");
-const search = document.getElementById("search");
-const loadBtn = document.getElementById("loadBtn");
-const statusBox = document.getElementById("status");
-const teamsBox = document.getElementById("teams");
-let allTeams = [];
 
-function renderTeams(){
-  const term = search.value.trim().toLowerCase();
-  const filtered = allTeams.filter(t =>
-    (t.strTeam || "").toLowerCase().includes(term)
-  );
+const country =
+document.getElementById("country");
 
-  if(!filtered.length){
-    teamsBox.innerHTML = '<div class="empty">Nenhum time encontrado.</div>';
-    return;
-  }
+const search =
+document.getElementById("search");
 
-  teamsBox.innerHTML = filtered.map(t => `
-    <div class="team">
-      <img src="${t.strBadge || t.strTeamBadge || ''}" alt="${escapeHtml(t.strTeam || 'Time')}"
-           onerror="this.style.display='none'">
-      <strong>${escapeHtml(t.strTeam || 'Time')}</strong>
-      <small>${escapeHtml(t.strLeague || 'Futebol')}</small>
-    </div>
-  `).join("");
+const loadBtn =
+document.getElementById("loadBtn");
+
+const statusBox =
+document.getElementById("status");
+
+const teamsBox =
+document.getElementById("teams");
+
+const ligaBox =
+document.getElementById("liga");
+
+let allTeams=[];
+
+
+/* PRINCIPAIS LIGAS */
+
+const ligas={
+
+Brazil:{
+  nome:"Brazilian Serie A",
+  titulo:"🇧🇷 Brasileirão Série A"
+},
+
+Argentina:{
+  nome:"Argentine Primera Division",
+  titulo:"🇦🇷 Primera División"
+},
+
+England:{
+  nome:"English Premier League",
+  titulo:"🏴 Premier League"
+},
+
+Spain:{
+  nome:"Spanish La Liga",
+  titulo:"🇪🇸 La Liga"
+},
+
+Italy:{
+  nome:"Italian Serie A",
+  titulo:"🇮🇹 Serie A"
+},
+
+Germany:{
+  nome:"German Bundesliga",
+  titulo:"🇩🇪 Bundesliga"
+},
+
+France:{
+  nome:"French Ligue 1",
+  titulo:"🇫🇷 Ligue 1"
+},
+
+Portugal:{
+  nome:"Portuguese Primeira Liga",
+  titulo:"🇵🇹 Liga Portugal"
+},
+
+Netherlands:{
+  nome:"Dutch Eredivisie",
+  titulo:"🇳🇱 Eredivisie"
+},
+
+"United States":{
+  nome:"American Major League Soccer",
+  titulo:"🇺🇸 MLS"
 }
+
+};
+
+
+/* TIMES PRINCIPAIS */
+
+const principais={
+
+Brazil:[
+"Flamengo",
+"Palmeiras",
+"Corinthians",
+"Sao Paulo",
+"Santos",
+"Fluminense",
+"Vasco da Gama",
+"Botafogo",
+"Gremio",
+"Internacional",
+"Cruzeiro",
+"Atletico Mineiro",
+"Bahia",
+"Fortaleza"
+],
+
+Argentina:[
+"River Plate",
+"Boca Juniors",
+"Racing Club",
+"Independiente",
+"San Lorenzo",
+"Estudiantes"
+],
+
+England:[
+"Manchester City",
+"Manchester United",
+"Liverpool",
+"Arsenal",
+"Chelsea",
+"Tottenham",
+"Newcastle United",
+"Aston Villa",
+"West Ham United",
+"Everton"
+],
+
+Spain:[
+"Real Madrid",
+"Barcelona",
+"Atletico Madrid",
+"Sevilla",
+"Valencia",
+"Villarreal",
+"Athletic Club",
+"Real Sociedad"
+],
+
+Italy:[
+"Juventus",
+"Inter Milan",
+"AC Milan",
+"Napoli",
+"Roma",
+"Lazio",
+"Atalanta",
+"Fiorentina"
+],
+
+Germany:[
+"Bayern Munich",
+"Borussia Dortmund",
+"RB Leipzig",
+"Bayer Leverkusen",
+"Eintracht Frankfurt",
+"Schalke 04"
+],
+
+France:[
+"Paris Saint-Germain",
+"Marseille",
+"Lyon",
+"Monaco",
+"Lille",
+"Nice"
+],
+
+Portugal:[
+"Benfica",
+"Porto",
+"Sporting CP",
+"Braga",
+"Boavista"
+],
+
+Netherlands:[
+"Ajax",
+"PSV Eindhoven",
+"Feyenoord",
+"AZ Alkmaar"
+],
+
+"United States":[
+"Inter Miami",
+"LA Galaxy",
+"Los Angeles FC",
+"Seattle Sounders",
+"New York City FC"
+]
+
+};
+
+
+/* NORMALIZAR NOMES */
+
+function normalizar(nome){
+
+return String(nome || "")
+.toLowerCase()
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"")
+.replace(/[^a-z0-9]/g,"");
+
+}
+
+
+/* PROTEGER HTML */
 
 function escapeHtml(text){
-  return String(text).replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
-  }[c]));
+
+return String(text).replace(
+/[&<>"']/g,
+
+c => ({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+"\"":"&quot;",
+"'":"&#039;"
+}[c])
+
+);
+
 }
+
+
+/* MOSTRAR TIMES */
+
+function renderTeams(){
+
+const termo=
+normalizar(search.value);
+
+const filtrados=
+allTeams.filter(team =>
+normalizar(team.strTeam)
+.includes(termo)
+);
+
+if(!filtrados.length){
+
+teamsBox.innerHTML=
+'<div class="empty">Nenhum time encontrado.</div>';
+
+return;
+}
+
+teamsBox.innerHTML=
+filtrados.map(team => `
+
+<div class="team">
+
+<img
+src="${team.strBadge || team.strTeamBadge || ""}"
+alt="${escapeHtml(team.strTeam || "Time")}"
+onerror="this.style.display='none'"
+>
+
+<strong>
+${escapeHtml(team.strTeam || "Time")}
+</strong>
+
+<small>
+${escapeHtml(team.strLeague || "Futebol")}
+</small>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* BUSCAR TIMES */
 
 async function loadTeams(){
-  const c = country.value;
-  statusBox.textContent = "⏳ Carregando principais times...";
-  teamsBox.innerHTML = '<div class="empty">Buscando clubes...</div>';
-  allTeams = [];
 
-  const principais = {
-    Brazil: [
-      "Flamengo","Palmeiras","Corinthians","São Paulo","Santos",
-      "Fluminense","Vasco da Gama","Botafogo","Grêmio","Internacional",
-      "Cruzeiro","Atlético Mineiro","Bahia","Fortaleza"
-    ],
-    Argentina: [
-      "River Plate","Boca Juniors","Racing Club","Independiente",
-      "San Lorenzo","Estudiantes"
-    ],
-    England: [
-      "Manchester City","Manchester United","Liverpool","Arsenal",
-      "Chelsea","Tottenham","Newcastle United","Aston Villa",
-      "West Ham United","Everton"
-    ],
-    Spain: [
-      "Real Madrid","Barcelona","Atlético Madrid","Sevilla",
-      "Valencia","Villarreal","Athletic Club","Real Sociedad"
-    ],
-    Italy: [
-      "Juventus","Inter","Milan","Napoli","Roma",
-      "Lazio","Atalanta","Fiorentina"
-    ],
-    Germany: [
-      "Bayern Munich","Borussia Dortmund","RB Leipzig",
-      "Bayer Leverkusen","Schalke 04","Eintracht Frankfurt"
-    ],
-    France: [
-      "Paris Saint-Germain","Marseille","Lyon","Monaco",
-      "Lille","Nice"
-    ],
-    Portugal: [
-      "Benfica","Porto","Sporting CP","Braga","Boavista"
-    ],
-    Netherlands: [
-      "Ajax","PSV Eindhoven","Feyenoord","AZ Alkmaar"
-    ],
-    "United States": [
-      "Inter Miami","LA Galaxy","Los Angeles FC",
-      "Seattle Sounders","New York City FC"
-    ]
-    };
+const pais=
+country.value;
 
-  try{
-    const url =
-      "https://www.thesportsdb.com/api/v1/json/123/search_all_teams.php" +
-      "?s=Soccer&c=" + encodeURIComponent(c);
+const liga=
+ligas[pais];
 
-    const response = await fetch(url);
-    if(!response.ok) throw new Error("HTTP " + response.status);
+statusBox.textContent=
+"⏳ Carregando principais clubes...";
 
-    const data = await response.json();
-    const teams = Array.isArray(data.teams) ? data.teams : [];
+ligaBox.textContent=
+liga.titulo;
 
-    const nomes = principais[c] || [];
+teamsBox.innerHTML=
+'<div class="empty">Buscando clubes e escudos...</div>';
 
-    allTeams = teams
-      .filter(t => t && t.strTeam)
-      .filter((t, i, arr) =>
-        arr.findIndex(x => x.strTeam === t.strTeam) === i
-      )
-      .sort((a,b) => {
-        const ia = nomes.findIndex(n =>
-          n.toLowerCase() === a.strTeam.toLowerCase()
-        );
-        const ib = nomes.findIndex(n =>
-          n.toLowerCase() === b.strTeam.toLowerCase()
-        );
+allTeams=[];
 
-        if(ia !== -1 && ib === -1) return -1;
-        if(ia === -1 && ib !== -1) return 1;
-        if(ia !== -1 && ib !== -1) return ia - ib;
+try{
 
-        return a.strTeam.localeCompare(b.strTeam);
-      });
+const url=
+"https://www.thesportsdb.com/api/v1/json/123/search_all_teams.php"
++
+"?l="
++
+encodeURIComponent(liga.nome)
++
+"&s=Soccer";
 
-    statusBox.textContent =
-      allTeams.length
-        ? `✅ ${allTeams.length} times carregados de ${c}.`
-        : `⚠️ Nenhum time encontrado para ${c}.`;
+const response=
+await fetch(url);
 
-    renderTeams();
+if(!response.ok){
 
-  }catch(error){
-    console.error(error);
-    statusBox.textContent =
-      "❌ Não foi possível carregar os times agora.";
-    teamsBox.innerHTML =
-      '<div class="empty">Verifique sua internet e tente novamente.</div>';
-  }
-                                         
+throw new Error(
+"HTTP "+response.status
+);
+
 }
 
-loadBtn.addEventListener("click", loadTeams);
-search.addEventListener("input", renderTeams);
-country.addEventListener("change", () => {
-  search.value = "";
-  teamsBox.innerHTML = '<div class="empty">Toque em “Carregar times”.</div>';
-  statusBox.textContent = "País alterado.";
+const data=
+await response.json();
+
+let times=
+Array.isArray(data.teams)
+?
+data.teams
+:
+[];
+
+
+/* REMOVER DUPLICADOS */
+
+times=
+times
+.filter(team =>
+team &&
+team.strTeam
+)
+.filter((team,index,array)=>
+array.findIndex(
+x => x.strTeam === team.strTeam
+) === index
+);
+
+
+/* ORDENAR PRINCIPAIS PRIMEIRO */
+
+const lista=
+principais[pais] || [];
+
+times.sort((a,b)=>{
+
+const ia=
+lista.findIndex(nome =>
+normalizar(nome)
+===
+normalizar(a.strTeam)
+);
+
+const ib=
+lista.findIndex(nome =>
+normalizar(nome)
+===
+normalizar(b.strTeam)
+);
+
+if(ia !== -1 && ib === -1)
+return -1;
+
+if(ia === -1 && ib !== -1)
+return 1;
+
+if(ia !== -1 && ib !== -1)
+return ia-ib;
+
+return a.strTeam.localeCompare(
+b.strTeam
+);
+
 });
+
+
+allTeams=times;
+
+statusBox.textContent=
+allTeams.length
+?
+`✅ ${allTeams.length} clubes encontrados.`
+:
+"⚠️ Nenhum clube encontrado.";
+
+renderTeams();
+
+}
+catch(error){
+
+console.error(error);
+
+statusBox.textContent=
+"❌ Erro ao carregar os clubes.";
+
+teamsBox.innerHTML=
+'<div class="empty">Verifique sua internet e tente novamente.</div>';
+
+}
+
+}
+
+
+/* BOTÃO */
+
+loadBtn.addEventListener(
+"click",
+loadTeams
+);
+
+
+/* PESQUISA */
+
+search.addEventListener(
+"input",
+renderTeams
+);
+
+
+/* TROCAR PAÍS */
+
+country.addEventListener(
+"change",
+()=>{
+
+search.value="";
+
+ligaBox.textContent="";
+
+teamsBox.innerHTML=
+'<div class="empty">Toque em “Carregar principais times”.</div>';
+
+statusBox.textContent=
+"País alterado.";
+
+}
+);
+
 </script>
+
 </body>
 </html>
