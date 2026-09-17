@@ -673,16 +673,49 @@ footer strong{
 
   </div>
 
+ <div class="game" style="position:relative;overflow:hidden;">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+    <div class="league">🏆 COPA LIBERTADORES</div>
+
+    <div style="font-size:10px;color:#39ff68;background:#082c18;padding:6px 9px;border-radius:20px;">
+      HOJE
+    </div>
+  </div>
+
+  <div style="text-align:center;color:#7f9088;font-size:12px;margin-bottom:18px;">
+    📅 17/09/2026 • 21:30
+  </div>
+
+  <div class="teams">
+
+    <div style="text-align:center;">
+      <img
+        src="https://a.espncdn.com/i/teamlogos/soccer/500/819.png"
+        alt="Flamengo"
+        style="width:55px;height:55px;object-fit:contain;margin-bottom:8px;">
+      <div class="team">Flamengo</div>
+      <div style="font-size:10px;color:#7f9088;margin-top:4px;">🏠 CASA</div>
+    </div>
+
+    <div>
+      <div class="vs" style="font-size:14px;">VS</div>
+      <div style="font-size:12px;color:#39ff68;margin-top:5px;">21:30</div>
+    </div>
+
+    <div style="text-align:center;">
+      <img
+        src="https://a.espncdn.com/i/teamlogos/soccer/500/17086.png"
+        alt="Independiente del Valle"
+        style="width:55px;height:55px;object-fit:contain;margin-bottom:8px;">
+      <div class="team">Independiente del Valle</div>
+      <div style="font-size:10px;color:#7f9088;margin-top:4px;">✈️ FORA</div>
+    </div>
+
+  </div>
+
   <div class="game-tip">
-    🎯 Palpite demonstrativo: Flamengo vence
-  </div>
-
-  <div style="text-align:center;margin-top:12px;font-size:12px;color:#39ff68;">
-    🔥 Tendência Alta
-  </div>
-
-  <div style="text-align:center;margin-top:8px;font-size:11px;color:#7f9088;">
-    📊 Confiança demonstrativa: 60%
+    ⚽ Jogo confirmado
   </div>
 
   <button
@@ -690,7 +723,7 @@ footer strong{
     style="width:100%;margin-top:12px;padding:12px;font-size:14px;"
     onclick="
       document.getElementById('timeCasa').value='Flamengo';
-      document.getElementById('timeFora').value='Palmeiras';
+      document.getElementById('timeFora').value='Independiente del Valle';
       document.getElementById('palpites').scrollIntoView({behavior:'smooth'});
     "
   >
