@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GolZen - Banco de Times</title>
+<title>GolZen - Banco Mundial de Times</title>
 
 <style>
 *{
@@ -69,41 +69,27 @@ h1{
   margin-bottom:20px;
 }
 
-.controls{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
 label{
   display:block;
   color:#cbd5d1;
-  font-size:13px;
+  font-size:14px;
   font-weight:bold;
-  margin-bottom:7px;
+  margin-bottom:8px;
 }
 
-select,
 input{
   width:100%;
-  padding:14px;
-  border-radius:11px;
+  padding:16px;
+  border-radius:12px;
   border:1px solid #254b36;
   background:#030806;
   color:#fff;
-  font-size:15px;
+  font-size:16px;
+  outline:none;
 }
 
-button{
-  margin-top:15px;
-  width:100%;
-  padding:14px;
-  border:0;
-  border-radius:12px;
-  background:#00d819;
-  color:#001508;
-  font-weight:900;
-  font-size:16px;
+input:focus{
+  border-color:#00d819;
 }
 
 .status{
@@ -134,12 +120,17 @@ button{
   background:#030806;
 }
 
-.team img{
-  width:75px;
-  height:75px;
-  object-fit:contain;
+.badge{
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   margin:5px auto 10px;
-  display:block;
+  background:#092719;
+  border:1px solid #254b36;
+  font-size:30px;
 }
 
 .team strong{
@@ -150,7 +141,7 @@ button{
 .team small{
   display:block;
   color:#7f9088;
-  margin-top:5px;
+  margin-top:6px;
 }
 
 .empty{
@@ -178,12 +169,12 @@ button{
 }
 
 @media(max-width:520px){
-  .controls{
-    grid-template-columns:1fr;
-  }
-
   .grid{
     grid-template-columns:1fr 1fr;
+  }
+
+  .team{
+    padding:13px;
   }
 }
 </style>
@@ -200,81 +191,44 @@ button{
 
 <section class="card">
 
-<h1>🌎 Banco de Times</h1>
+<h1>🌎 Banco Mundial de Times</h1>
 
 <p class="sub">
-Escolha um país para carregar os principais clubes da principal liga.
+Pesquise todos os principais clubes em uma única busca.
+Digite o nome do time, país ou campeonato.
 </p>
 
-<div class="controls">
-
-<div>
-<label for="country">País</label>
-
-<select id="country">
-
-<option value="Brazil">🇧🇷 Brasil</option>
-<option value="Argentina">🇦🇷 Argentina</option>
-<option value="England">🏴 Inglaterra</option>
-<option value="Spain">🇪🇸 Espanha</option>
-<option value="Italy">🇮🇹 Itália</option>
-<option value="Germany">🇩🇪 Alemanha</option>
-<option value="France">🇫🇷 França</option>
-<option value="Portugal">🇵🇹 Portugal</option>
-<option value="Netherlands">🇳🇱 Holanda</option>
-<option value="United States">🇺🇸 Estados Unidos</option>
-
-</select>
-</div>
-
-<div>
-
-<label for="search">Buscar time</label>
+<label for="search">
+🔎 Buscar time
+</label>
 
 <input
 id="search"
 type="search"
-placeholder="Ex.: Flamengo">
+autocomplete="off"
+placeholder="Ex.: Flamengo, Real Madrid, Liverpool..."
+>
 
+<div id="status" class="status"></div>
+
+<div class="liga">
+⚽ Principais clubes do mundo
 </div>
 
-</div>
-
-<button id="loadBtn">
-🔎 Carregar principais times
-</button>
-
-<div id="status" class="status">
-Escolha um país e carregue os times.
-</div>
-
-<div id="liga" class="liga"></div>
-
-<div id="teams" class="grid">
-
-<div class="empty">
-Os clubes aparecerão aqui.
-</div>
-
-</div>
+<div id="teams" class="grid"></div>
 
 <div class="note">
-ℹ️ O GolZen consulta os clubes diretamente pela principal liga de cada país.
+ℹ️ Digite qualquer parte do nome do clube, país ou campeonato para encontrar os times.
 </div>
 
 </section>
+
 </div>
 
 <script>
 
-const country =
-document.getElementById("country");
-
 const search =
 document.getElementById("search");
-
-const loadBtn =
-document.getElementById("loadBtn");
 
 const statusBox =
 document.getElementById("status");
@@ -282,179 +236,195 @@ document.getElementById("status");
 const teamsBox =
 document.getElementById("teams");
 
-const ligaBox =
-document.getElementById("liga");
 
-let allTeams=[];
+/* BANCO MUNDIAL DE CLUBES */
 
+const clubes = [
 
-/* PRINCIPAIS LIGAS */
+/* BRASIL */
 
-const ligas={
-
-Brazil:{
-  nome:"Brazilian Serie A",
-  titulo:"🇧🇷 Brasileirão Série A"
-},
-
-Argentina:{
-  nome:"Argentine Primera Division",
-  titulo:"🇦🇷 Primera División"
-},
-
-England:{
-  nome:"English Premier League",
-  titulo:"🏴 Premier League"
-},
-
-Spain:{
-  nome:"Spanish La Liga",
-  titulo:"🇪🇸 La Liga"
-},
-
-Italy:{
-  nome:"Italian Serie A",
-  titulo:"🇮🇹 Serie A"
-},
-
-Germany:{
-  nome:"German Bundesliga",
-  titulo:"🇩🇪 Bundesliga"
-},
-
-France:{
-  nome:"French Ligue 1",
-  titulo:"🇫🇷 Ligue 1"
-},
-
-Portugal:{
-  nome:"Portuguese Primeira Liga",
-  titulo:"🇵🇹 Liga Portugal"
-},
-
-Netherlands:{
-  nome:"Dutch Eredivisie",
-  titulo:"🇳🇱 Eredivisie"
-},
-
-"United States":{
-  nome:"American Major League Soccer",
-  titulo:"🇺🇸 MLS"
-}
-
-};
+["Flamengo","🇧🇷 Brasil","Brasileirão"],
+["Palmeiras","🇧🇷 Brasil","Brasileirão"],
+["Corinthians","🇧🇷 Brasil","Brasileirão"],
+["São Paulo","🇧🇷 Brasil","Brasileirão"],
+["Santos","🇧🇷 Brasil","Brasileirão"],
+["Fluminense","🇧🇷 Brasil","Brasileirão"],
+["Vasco da Gama","🇧🇷 Brasil","Brasileirão"],
+["Botafogo","🇧🇷 Brasil","Brasileirão"],
+["Grêmio","🇧🇷 Brasil","Brasileirão"],
+["Internacional","🇧🇷 Brasil","Brasileirão"],
+["Cruzeiro","🇧🇷 Brasil","Brasileirão"],
+["Atlético Mineiro","🇧🇷 Brasil","Brasileirão"],
+["Bahia","🇧🇷 Brasil","Brasileirão"],
+["Fortaleza","🇧🇷 Brasil","Brasileirão"],
 
 
-/* TIMES PRINCIPAIS */
+/* ARGENTINA */
 
-const principais={
-
-Brazil:[
-"Flamengo",
-"Palmeiras",
-"Corinthians",
-"Sao Paulo",
-"Santos",
-"Fluminense",
-"Vasco da Gama",
-"Botafogo",
-"Gremio",
-"Internacional",
-"Cruzeiro",
-"Atletico Mineiro",
-"Bahia",
-"Fortaleza"
-],
-
-Argentina:[
-"River Plate",
-"Boca Juniors",
-"Racing Club",
-"Independiente",
-"San Lorenzo",
-"Estudiantes"
-],
-
-England:[
-"Manchester City",
-"Manchester United",
-"Liverpool",
-"Arsenal",
-"Chelsea",
-"Tottenham",
-"Newcastle United",
-"Aston Villa",
-"West Ham United",
-"Everton"
-],
-
-Spain:[
-"Real Madrid",
-"Barcelona",
-"Atletico Madrid",
-"Sevilla",
-"Valencia",
-"Villarreal",
-"Athletic Club",
-"Real Sociedad"
-],
-
-Italy:[
-"Juventus",
-"Inter Milan",
-"AC Milan",
-"Napoli",
-"Roma",
-"Lazio",
-"Atalanta",
-"Fiorentina"
-],
-
-Germany:[
-"Bayern Munich",
-"Borussia Dortmund",
-"RB Leipzig",
-"Bayer Leverkusen",
-"Eintracht Frankfurt",
-"Schalke 04"
-],
-
-France:[
-"Paris Saint-Germain",
-"Marseille",
-"Lyon",
-"Monaco",
-"Lille",
-"Nice"
-],
-
-Portugal:[
-"Benfica",
-"Porto",
-"Sporting CP",
-"Braga",
-"Boavista"
-],
-
-Netherlands:[
-"Ajax",
-"PSV Eindhoven",
-"Feyenoord",
-"AZ Alkmaar"
-],
-
-"United States":[
-"Inter Miami",
-"LA Galaxy",
-"Los Angeles FC",
-"Seattle Sounders",
-"New York City FC"
-]
-
-};
+["River Plate","🇦🇷 Argentina","Primera División"],
+["Boca Juniors","🇦🇷 Argentina","Primera División"],
+["Racing Club","🇦🇷 Argentina","Primera División"],
+["Independiente","🇦🇷 Argentina","Primera División"],
+["San Lorenzo","🇦🇷 Argentina","Primera División"],
+["Estudiantes","🇦🇷 Argentina","Primera División"],
+["Vélez Sarsfield","🇦🇷 Argentina","Primera División"],
+["Rosario Central","🇦🇷 Argentina","Primera División"],
 
 
-/* NORMALIZAR NOMES */
+/* INGLATERRA */
+
+["Manchester City","🏴 Inglaterra","Premier League"],
+["Manchester United","🏴 Inglaterra","Premier League"],
+["Liverpool","🏴 Inglaterra","Premier League"],
+["Arsenal","🏴 Inglaterra","Premier League"],
+["Chelsea","🏴 Inglaterra","Premier League"],
+["Tottenham","🏴 Inglaterra","Premier League"],
+["Newcastle United","🏴 Inglaterra","Premier League"],
+["Aston Villa","🏴 Inglaterra","Premier League"],
+["West Ham United","🏴 Inglaterra","Premier League"],
+["Everton","🏴 Inglaterra","Premier League"],
+["Brighton","🏴 Inglaterra","Premier League"],
+["Crystal Palace","🏴 Inglaterra","Premier League"],
+
+
+/* ESPANHA */
+
+["Real Madrid","🇪🇸 Espanha","La Liga"],
+["Barcelona","🇪🇸 Espanha","La Liga"],
+["Atlético de Madrid","🇪🇸 Espanha","La Liga"],
+["Sevilla","🇪🇸 Espanha","La Liga"],
+["Valencia","🇪🇸 Espanha","La Liga"],
+["Villarreal","🇪🇸 Espanha","La Liga"],
+["Athletic Club","🇪🇸 Espanha","La Liga"],
+["Real Sociedad","🇪🇸 Espanha","La Liga"],
+["Real Betis","🇪🇸 Espanha","La Liga"],
+["Girona","🇪🇸 Espanha","La Liga"],
+
+
+/* ITALIA */
+
+["Juventus","🇮🇹 Itália","Serie A"],
+["Inter Milan","🇮🇹 Itália","Serie A"],
+["AC Milan","🇮🇹 Itália","Serie A"],
+["Napoli","🇮🇹 Itália","Serie A"],
+["Roma","🇮🇹 Itália","Serie A"],
+["Lazio","🇮🇹 Itália","Serie A"],
+["Atalanta","🇮🇹 Itália","Serie A"],
+["Fiorentina","🇮🇹 Itália","Serie A"],
+["Bologna","🇮🇹 Itália","Serie A"],
+
+
+/* ALEMANHA */
+
+["Bayern Munich","🇩🇪 Alemanha","Bundesliga"],
+["Borussia Dortmund","🇩🇪 Alemanha","Bundesliga"],
+["Bayer Leverkusen","🇩🇪 Alemanha","Bundesliga"],
+["RB Leipzig","🇩🇪 Alemanha","Bundesliga"],
+["Eintracht Frankfurt","🇩🇪 Alemanha","Bundesliga"],
+["Schalke 04","🇩🇪 Alemanha","Bundesliga"],
+["Stuttgart","🇩🇪 Alemanha","Bundesliga"],
+["Wolfsburg","🇩🇪 Alemanha","Bundesliga"],
+
+
+/* FRANCA */
+
+["Paris Saint-Germain","🇫🇷 França","Ligue 1"],
+["Marseille","🇫🇷 França","Ligue 1"],
+["Lyon","🇫🇷 França","Ligue 1"],
+["Monaco","🇫🇷 França","Ligue 1"],
+["Lille","🇫🇷 França","Ligue 1"],
+["Nice","🇫🇷 França","Ligue 1"],
+["Rennes","🇫🇷 França","Ligue 1"],
+
+
+/* PORTUGAL */
+
+["Benfica","🇵🇹 Portugal","Liga Portugal"],
+["Porto","🇵🇹 Portugal","Liga Portugal"],
+["Sporting CP","🇵🇹 Portugal","Liga Portugal"],
+["Braga","🇵🇹 Portugal","Liga Portugal"],
+["Boavista","🇵🇹 Portugal","Liga Portugal"],
+["Vitória de Guimarães","🇵🇹 Portugal","Liga Portugal"],
+
+
+/* HOLANDA */
+
+["Ajax","🇳🇱 Holanda","Eredivisie"],
+["PSV Eindhoven","🇳🇱 Holanda","Eredivisie"],
+["Feyenoord","🇳🇱 Holanda","Eredivisie"],
+["AZ Alkmaar","🇳🇱 Holanda","Eredivisie"],
+["Twente","🇳🇱 Holanda","Eredivisie"],
+
+
+/* TURQUIA */
+
+["Galatasaray","🇹🇷 Turquia","Süper Lig"],
+["Fenerbahçe","🇹🇷 Turquia","Süper Lig"],
+["Beşiktaş","🇹🇷 Turquia","Süper Lig"],
+["Trabzonspor","🇹🇷 Turquia","Süper Lig"],
+
+
+/* BELGICA */
+
+["Club Brugge","🇧🇪 Bélgica","Belgian Pro League"],
+["Anderlecht","🇧🇪 Bélgica","Belgian Pro League"],
+["Genk","🇧🇪 Bélgica","Belgian Pro League"],
+["Standard Liège","🇧🇪 Bélgica","Belgian Pro League"],
+
+
+/* ESCOCIA */
+
+["Celtic","🏴 Escócia","Scottish Premiership"],
+["Rangers","🏴 Escócia","Scottish Premiership"],
+
+
+/* ARABIA SAUDITA */
+
+["Al Hilal","🇸🇦 Arábia Saudita","Saudi Pro League"],
+["Al Nassr","🇸🇦 Arábia Saudita","Saudi Pro League"],
+["Al Ittihad","🇸🇦 Arábia Saudita","Saudi Pro League"],
+["Al Ahli","🇸🇦 Arábia Saudita","Saudi Pro League"],
+
+
+/* ESTADOS UNIDOS */
+
+["Inter Miami","🇺🇸 Estados Unidos","MLS"],
+["LA Galaxy","🇺🇸 Estados Unidos","MLS"],
+["Los Angeles FC","🇺🇸 Estados Unidos","MLS"],
+["Seattle Sounders","🇺🇸 Estados Unidos","MLS"],
+["New York City FC","🇺🇸 Estados Unidos","MLS"],
+["Atlanta United","🇺🇸 Estados Unidos","MLS"],
+
+
+/* MEXICO */
+
+["Club América","🇲🇽 México","Liga MX"],
+["Chivas Guadalajara","🇲🇽 México","Liga MX"],
+["Cruz Azul","🇲🇽 México","Liga MX"],
+["Monterrey","🇲🇽 México","Liga MX"],
+["Tigres UANL","🇲🇽 México","Liga MX"],
+["Pachuca","🇲🇽 México","Liga MX"],
+
+
+/* CHILE */
+
+["Colo-Colo","🇨🇱 Chile","Primera División"],
+["Universidad de Chile","🇨🇱 Chile","Primera División"],
+
+
+/* URUGUAI */
+
+["Nacional","🇺🇾 Uruguai","Primera División"],
+["Peñarol","🇺🇾 Uruguai","Primera División"],
+
+
+/* PERU */
+
+["Alianza Lima","🇵🇪 Peru","Liga 1"],
+["Universitario","🇵🇪 Peru","Liga 1"]
+
+];
+
 
 function normalizar(nome){
 
@@ -467,64 +437,65 @@ return String(nome || "")
 }
 
 
-/* PROTEGER HTML */
-
-function escapeHtml(text){
-
-return String(text).replace(
-/[&<>"']/g,
-
-c => ({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-"\"":"&quot;",
-"'":"&#039;"
-}[c])
-
-);
-
-}
-
-
-/* MOSTRAR TIMES */
+/* MOSTRAR CLUBES */
 
 function renderTeams(){
 
-const termo=
+const termo =
 normalizar(search.value);
 
-const filtrados=
-allTeams.filter(team =>
-normalizar(team.strTeam)
-.includes(termo)
-);
+const resultados =
+clubes.filter(clube => {
 
-if(!filtrados.length){
+const nome =
+normalizar(clube[0]);
 
-teamsBox.innerHTML=
-'<div class="empty">Nenhum time encontrado.</div>';
+const pais =
+normalizar(clube[1]);
+
+const liga =
+normalizar(clube[2]);
+
+return nome.includes(termo)
+|| pais.includes(termo)
+|| liga.includes(termo);
+
+});
+
+
+statusBox.textContent =
+termo
+?
+`🔎 ${resultados.length} clube(s) encontrado(s).`
+:
+`🌎 ${clubes.length} clubes disponíveis.`;
+
+
+if(!resultados.length){
+
+teamsBox.innerHTML =
+'<div class="empty">⚠️ Nenhum time encontrado.<br><br>Tente outro nome.</div>';
 
 return;
+
 }
 
-teamsBox.innerHTML=
-filtrados.map(team => `
+
+teamsBox.innerHTML =
+resultados.map(clube => `
 
 <div class="team">
 
-<img
-src="${team.strBadge || team.strTeamBadge || ""}"
-alt="${escapeHtml(team.strTeam || "Time")}"
-onerror="this.style.display='none'"
->
+<div class="badge">
+⚽
+</div>
 
 <strong>
-${escapeHtml(team.strTeam || "Time")}
+${clube[0]}
 </strong>
 
 <small>
-${escapeHtml(team.strLeague || "Futebol")}
+${clube[1]} • ${clube[2]}
 </small>
 
 </div>
@@ -534,148 +505,7 @@ ${escapeHtml(team.strLeague || "Futebol")}
 }
 
 
-/* BUSCAR TIMES */
-
-async function loadTeams(){
-
-const pais=
-country.value;
-
-const liga=
-ligas[pais];
-
-statusBox.textContent=
-"⏳ Carregando principais clubes...";
-
-ligaBox.textContent=
-liga.titulo;
-
-teamsBox.innerHTML=
-'<div class="empty">Buscando clubes e escudos...</div>';
-
-allTeams=[];
-
-try{
-
-const url=
-"https://www.thesportsdb.com/api/v1/json/123/search_all_teams.php"
-+
-"?l="
-+
-encodeURIComponent(liga.nome)
-+
-"&s=Soccer";
-
-const response=
-await fetch(url);
-
-if(!response.ok){
-
-throw new Error(
-"HTTP "+response.status
-);
-
-}
-
-const data=
-await response.json();
-
-let times=
-Array.isArray(data.teams)
-?
-data.teams
-:
-[];
-
-
-/* REMOVER DUPLICADOS */
-
-times=
-times
-.filter(team =>
-team &&
-team.strTeam
-)
-.filter((team,index,array)=>
-array.findIndex(
-x => x.strTeam === team.strTeam
-) === index
-);
-
-
-/* ORDENAR PRINCIPAIS PRIMEIRO */
-
-const lista=
-principais[pais] || [];
-
-times.sort((a,b)=>{
-
-const ia=
-lista.findIndex(nome =>
-normalizar(nome)
-===
-normalizar(a.strTeam)
-);
-
-const ib=
-lista.findIndex(nome =>
-normalizar(nome)
-===
-normalizar(b.strTeam)
-);
-
-if(ia !== -1 && ib === -1)
-return -1;
-
-if(ia === -1 && ib !== -1)
-return 1;
-
-if(ia !== -1 && ib !== -1)
-return ia-ib;
-
-return a.strTeam.localeCompare(
-b.strTeam
-);
-
-});
-
-
-allTeams=times;
-
-statusBox.textContent=
-allTeams.length
-?
-`✅ ${allTeams.length} clubes encontrados.`
-:
-"⚠️ Nenhum clube encontrado.";
-
-renderTeams();
-
-}
-catch(error){
-
-console.error(error);
-
-statusBox.textContent=
-"❌ Erro ao carregar os clubes.";
-
-teamsBox.innerHTML=
-'<div class="empty">Verifique sua internet e tente novamente.</div>';
-
-}
-
-}
-
-
-/* BOTÃO */
-
-loadBtn.addEventListener(
-"click",
-loadTeams
-);
-
-
-/* PESQUISA */
+/* PESQUISA AUTOMÁTICA */
 
 search.addEventListener(
 "input",
@@ -683,24 +513,9 @@ renderTeams
 );
 
 
-/* TROCAR PAÍS */
+/* INICIAR */
 
-country.addEventListener(
-"change",
-()=>{
-
-search.value="";
-
-ligaBox.textContent="";
-
-teamsBox.innerHTML=
-'<div class="empty">Toque em “Carregar principais times”.</div>';
-
-statusBox.textContent=
-"País alterado.";
-
-}
-);
+renderTeams();
 
 </script>
 
