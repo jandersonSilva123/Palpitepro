@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GolZen - Banco de Times</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:radial-gradient(circle at top,#092719 0%,#030706 42%);
+  color:#fff;min-height:100vh;padding:20px;
+}
+.wrap{max-width:1100px;margin:auto}
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 0 25px;border-bottom:1px solid #173b29;
+}
+.logo{font-size:28px;font-weight:900;color:#39ff68}
+.logo span{color:#fff}
+.back{color:#39ff68;text-decoration:none;font-weight:bold}
+.card{
+  margin-top:25px;padding:22px;border:1px solid #173b29;
+  border-radius:20px;background:linear-gradient(145deg,#0a1912,#06100c);
+}
+h1{font-size:27px;margin-bottom:8px}
+.sub{color:#94a3a8;line-height:1.6;margin-bottom:20px}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;color:#cbd5d1;font-size:13px;font-weight:bold;margin-bottom:7px}
+select,input{
+  width:100%;padding:14px;border-radius:11px;border:1px solid #254b36;
+  background:#030806;color:#fff;font-size:15px;outline:none;
+}
+button{
+  margin-top:15px;width:100%;padding:14px;border:0;border-radius:12px;
+  background:#39ff68;color:#001508;font-weight:900;font-size:15px;cursor:pointer;
+}
+.status{margin-top:15px;color:#94a3a8;font-size:13px}
+.grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px;
+}
+.team{
+  padding:16px;text-align:center;border:1px solid #173b29;border-radius:15px;
+  background:#030806;transition:.2s;
+}
+.team:hover{transform:translateY(-3px);border-color:#39ff68}
+.team img{width:68px;height:68px;object-fit:contain;margin:5px auto 10px;display:block}
+.team strong{display:block;font-size:14px}
+.team small{display:block;color:#7f9088;margin-top:5px}
+.empty{grid-column:1/-1;text-align:center;padding:30px;color:#94a3a8}
+.note{
+  margin-top:18px;padding:12px;border-radius:10px;background:#241d05;
+  border:1px solid #4b3c0b;color:#facc15;font-size:12px;line-height:1.6
+}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.controls{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo">⚽ Gol<span>Zen</span></div>
+  <a class="back" href="index.html">← Voltar</a>
+</header>
+
+<section class="card">
+  <h1>🌎 Banco de Times</h1>
+  <p class="sub">Escolha um país para carregar clubes e seus escudos. Depois use a busca para encontrar um time.</p>
+
+  <div class="controls">
+    <div>
+      <label for="country">País</label>
+      <select id="country">
+        <option value="Brazil">🇧🇷 Brasil</option>
+        <option value="Argentina">🇦🇷 Argentina</option>
+        <option value="England">🏴 Inglaterra</option>
+        <option value="Spain">🇪🇸 Espanha</option>
+        <option value="Italy">🇮🇹 Itália</option>
+        <option value="Germany">🇩🇪 Alemanha</option>
+        <option value="France">🇫🇷 França</option>
+        <option value="Portugal">🇵🇹 Portugal</option>
+        <option value="Netherlands">🇳🇱 Holanda</option>
+        <option value="United States">🇺🇸 Estados Unidos</option>
+      </select>
+    </div>
+    <div>
+      <label for="search">Buscar time</label>
+      <input id="search" type="search" placeholder="Ex.: Flamengo">
+    </div>
+  </div>
+
+  <button id="loadBtn">🔎 Carregar times</button>
+  <div id="status" class="status">Selecione um país e toque em “Carregar times”.</div>
+  <div id="teams" class="grid">
+    <div class="empty">Os times aparecerão aqui.</div>
+  </div>
+
+  <div class="note">
+    ℹ️ Esta primeira versão usa a API gratuita do TheSportsDB para consultar clubes e escudos.
+    O serviço possui limites de uso na versão gratuita.
+  </div>
+</section>
+</div>
+
+<script>
+const country = document.getElementById("country");
+const search = document.getElementById("search");
+const loadBtn = document.getElementById("loadBtn");
+const statusBox = document.getElementById("status");
+const teamsBox = document.getElementById("teams");
+let allTeams = [];
+
+function renderTeams(){
+  const term = search.value.trim().toLowerCase();
+  const filtered = allTeams.filter(t =>
+    (t.strTeam || "").toLowerCase().includes(term)
+  );
+
+  if(!filtered.length){
+    teamsBox.innerHTML = '<div class="empty">Nenhum time encontrado.</div>';
+    return;
+  }
+
+  teamsBox.innerHTML = filtered.map(t => `
+    <div class="team">
+      <img src="${t.strBadge || t.strTeamBadge || ''}" alt="${escapeHtml(t.strTeam || 'Time')}"
+           onerror="this.style.display='none'">
+      <strong>${escapeHtml(t.strTeam || 'Time')}</strong>
+      <small>${escapeHtml(t.strLeague || 'Futebol')}</small>
+    </div>
+  `).join("");
+}
+
+function escapeHtml(text){
+  return String(text).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  }[c]));
+}
+
+async function loadTeams(){
+  const c = country.value;
+  statusBox.textContent = "⏳ Carregando times...";
+  teamsBox.innerHTML = '<div class="empty">Buscando clubes...</div>';
+  allTeams = [];
+
+  try{
+    const url =
+      "https://www.thesportsdb.com/api/v1/json/123/search_all_teams.php" +
+      "?s=Soccer&c=" + encodeURIComponent(c);
+
+    const response = await fetch(url);
+    if(!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+    allTeams = Array.isArray(data.teams) ? data.teams : [];
+
+    statusBox.textContent =
+      allTeams.length
+        ? `✅ ${allTeams.length} times carregados de ${c}.`
+        : `⚠️ Nenhum time encontrado para ${c}.`;
+
+    renderTeams();
+  }catch(error){
+    statusBox.textContent =
+      "❌ Não foi possível carregar os times agora. Tente novamente.";
+    teamsBox.innerHTML =
+      '<div class="empty">Verifique sua internet e tente novamente.</div>';
+  }
+}
+
+loadBtn.addEventListener("click", loadTeams);
+search.addEventListener("input", renderTeams);
+country.addEventListener("change", () => {
+  search.value = "";
+  teamsBox.innerHTML = '<div class="empty">Toque em “Carregar times”.</div>';
+  statusBox.textContent = "País alterado.";
+});
+</script>
+</body>
+</html>
