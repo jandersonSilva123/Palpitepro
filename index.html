@@ -1233,7 +1233,6 @@ function gerarPalpite(){
       "⚠️ Digite o nome dos dois times.";
 
     return;
-
   }
 
 
@@ -1248,82 +1247,358 @@ function gerarPalpite(){
       "⚠️ Os times precisam ser diferentes.";
 
     return;
-
   }
 
 
   erro.style.display="none";
 
-
   atualizarTimes();
 
 
   /*
-   * ESTIMATIVAS DEMONSTRATIVAS
+   * MOTOR GOLZEN - ETAPA 1
    *
-   * Os valores abaixo são gerados
-   * aleatoriamente pela página.
+   * Modelo estatístico baseado em:
+   * ataque + defesa + mando
+   * + gols esperados
+   * + distribuição de Poisson
+   *
+   * Na ETAPA 2 estes dados serão
+   * alimentados automaticamente
+   * pela fonte de dados da Sportmonks.
    */
 
 
-  let casaProb =
-    numero(45,65);
+  const MEDIA_GOLS = 1.35;
 
-  let foraProb =
-    numero(20,40);
+  const VANTAGEM_MANDO =
+    local === "neutro" ? 1.00 : 1.12;
 
 
-  if(local === "neutro"){
+  /*
+   * Perfis temporários.
+   *
+   * Estes valores serão substituídos
+   * pelos dados reais na Etapa 2.
+   */
 
-    casaProb -= 5;
-    foraProb += 5;
+  const perfis = {
 
+    "flamengo": {
+      ataque:1.20,
+      defesa:1.00
+    },
+
+    "palmeiras": {
+      ataque:1.15,
+      defesa:1.05
+    },
+
+    "real madrid": {
+      ataque:1.30,
+      defesa:0.95
+    },
+
+    "man. city": {
+      ataque:1.28,
+      defesa:0.96
+    },
+
+    "manchester city": {
+      ataque:1.28,
+      defesa:0.96
+    },
+
+    "arsenal": {
+      ataque:1.18,
+      defesa:1.00
+    },
+
+    "liverpool": {
+      ataque:1.25,
+      defesa:0.98
+    }
+
+  };
+
+
+  function obterPerfil(nome){
+
+    const chave =
+      nome.toLowerCase().trim();
+
+    if(perfis[chave]){
+      return perfis[chave];
+    }
+
+    /*
+     * Base neutra para times ainda
+     * não cadastrados.
+     */
+    return {
+      ataque:1.00,
+      defesa:1.00
+    };
   }
 
 
-  let empateProb =
-    100 - casaProb - foraProb;
+  const perfilCasa =
+    obterPerfil(casa);
+
+  const perfilFora =
+    obterPerfil(fora);
 
 
-  if(empateProb < 10){
+  /*
+   * GOLS ESPERADOS (LAMBDA)
+   */
 
-    empateProb = 10;
+  let lambdaCasa =
+    MEDIA_GOLS *
+    perfilCasa.ataque *
+    perfilFora.defesa *
+    VANTAGEM_MANDO;
 
-    casaProb =
-      100 -
-      empateProb -
-      foraProb;
+  let lambdaFora =
+    MEDIA_GOLS *
+    perfilFora.ataque *
+    perfilCasa.defesa;
 
+
+  /*
+   * Limites de segurança.
+   */
+
+  lambdaCasa =
+    Math.max(0.15, Math.min(lambdaCasa,4.5));
+
+  lambdaFora =
+    Math.max(0.15, Math.min(lambdaFora,4.5));
+
+
+  /*
+   * FUNÇÃO FATORIAL
+   */
+
+  function fatorial(n){
+
+    let resultado = 1;
+
+    for(let i=2;i<=n;i++){
+      resultado *= i;
+    }
+
+    return resultado;
   }
 
 
-  const golsCasa =
-    numero(0,3);
+  /*
+   * DISTRIBUIÇÃO DE POISSON
+   */
 
-  const golsFora =
-    numero(0,3);
+  function poisson(gols, lambda){
+
+    return (
+      Math.exp(-lambda) *
+      Math.pow(lambda,gols) /
+      fatorial(gols)
+    );
+  }
 
 
-  const total =
-    golsCasa + golsFora;
+  /*
+   * MATRIZ DE PLACARES
+   */
+
+  const MAX_GOLS = 7;
+
+  let matriz = [];
+
+  let probCasa = 0;
+  let probEmpate = 0;
+  let probFora = 0;
+
+  let probMais15 = 0;
+  let probMais25 = 0;
+  let probAmbas = 0;
 
 
-  const mais15 =
-    numero(65,85);
+  for(let golsCasa=0;
+      golsCasa<=MAX_GOLS;
+      golsCasa++){
 
-  const mais25 =
-    numero(45,70);
+    matriz[golsCasa] = [];
 
-  const ambas =
-    numero(45,70);
+    const pCasa =
+      poisson(golsCasa,lambdaCasa);
 
+
+    for(let golsFora=0;
+        golsFora<=MAX_GOLS;
+        golsFora++){
+
+      const pFora =
+        poisson(golsFora,lambdaFora);
+
+      const prob =
+        pCasa * pFora;
+
+
+      matriz[golsCasa][golsFora] =
+        prob;
+
+
+      /*
+       * 1X2
+       */
+
+      if(golsCasa > golsFora){
+
+        probCasa += prob;
+
+      }
+
+      else if(golsCasa === golsFora){
+
+        probEmpate += prob;
+
+      }
+
+      else{
+
+        probFora += prob;
+
+      }
+
+
+      /*
+       * OVER 1.5
+       */
+
+      if(golsCasa + golsFora >= 2){
+
+        probMais15 += prob;
+
+      }
+
+
+      /*
+       * OVER 2.5
+       */
+
+      if(golsCasa + golsFora >= 3){
+
+        probMais25 += prob;
+
+      }
+
+
+      /*
+       * AMBAS MARCAM
+       */
+
+      if(golsCasa >= 1 &&
+         golsFora >= 1){
+
+        probAmbas += prob;
+
+      }
+
+    }
+  }
+
+
+  /*
+   * NORMALIZAÇÃO
+   */
+
+  const soma =
+    probCasa +
+    probEmpate +
+    probFora;
+
+
+  probCasa =
+    probCasa / soma * 100;
+
+  probEmpate =
+    probEmpate / soma * 100;
+
+  probFora =
+    probFora / soma * 100;
+
+
+  probMais15 =
+    probMais15 / soma * 100;
+
+  probMais25 =
+    probMais25 / soma * 100;
+
+  probAmbas =
+    probAmbas / soma * 100;
+
+
+  /*
+   * ARREDONDAMENTO
+   */
+
+  probCasa =
+    Math.round(probCasa);
+
+  probEmpate =
+    Math.round(probEmpate);
+
+  probFora =
+    Math.round(probFora);
+
+  probMais15 =
+    Math.round(probMais15);
+
+  probMais25 =
+    Math.round(probMais25);
+
+  probAmbas =
+    Math.round(probAmbas);
+
+
+  /*
+   * PROBABILIDADE DO PLACAR
+   */
+
+  let maiorProbabilidade = 0;
+
+  let placarCasa = 0;
+  let placarFora = 0;
+
+
+  for(let gc=0;gc<=MAX_GOLS;gc++){
+
+    for(let gf=0;gf<=MAX_GOLS;gf++){
+
+      if(matriz[gc][gf] >
+         maiorProbabilidade){
+
+        maiorProbabilidade =
+          matriz[gc][gf];
+
+        placarCasa = gc;
+        placarFora = gf;
+      }
+
+    }
+  }
+
+
+  /*
+   * TENDÊNCIA PRINCIPAL
+   */
 
   let tendencia;
 
 
   if(
-    casaProb >= foraProb &&
-    casaProb >= empateProb
+    probCasa >= probEmpate &&
+    probCasa >= probFora
   ){
 
     tendencia =
@@ -1332,8 +1607,8 @@ function gerarPalpite(){
   }
 
   else if(
-    foraProb >= casaProb &&
-    foraProb >= empateProb
+    probFora >= probCasa &&
+    probFora >= probEmpate
   ){
 
     tendencia =
@@ -1349,97 +1624,146 @@ function gerarPalpite(){
   }
 
 
-  let analise;
+  /*
+   * ANÁLISE AUTOMÁTICA
+   */
+
+  const totalEsperado =
+    lambdaCasa + lambdaFora;
 
 
-  if(golsCasa > golsFora){
+  let analise =
+    "O modelo GolZen estima " +
+    lambdaCasa.toFixed(2) +
+    " gols para " +
+    casa +
+    " e " +
+    lambdaFora.toFixed(2) +
+    " para " +
+    fora +
+    ". ";
 
-    analise =
-      "A estimativa demonstrativa indica " +
-      "vantagem do mandante, com placar " +
-      "simulado de " +
-      golsCasa +
-      " x " +
-      golsFora +
-      ".";
+
+  if(probCasa > probFora){
+
+    analise +=
+      "A matriz estatística apresenta maior " +
+      "probabilidade para o mandante. ";
 
   }
 
-  else if(golsFora > golsCasa){
+  else if(probFora > probCasa){
 
-    analise =
-      "A estimativa demonstrativa indica " +
-      "vantagem do visitante, com placar " +
-      "simulado de " +
-      golsCasa +
-      " x " +
-      golsFora +
-      ".";
+    analise +=
+      "A matriz estatística apresenta maior " +
+      "probabilidade para o visitante. ";
 
   }
 
   else{
 
-    analise =
-      "A estimativa demonstrativa aponta " +
-      "equilíbrio entre as equipes, com " +
-      "placar simulado de " +
-      golsCasa +
-      " x " +
-      golsFora +
-      ".";
+    analise +=
+      "As probabilidades de vitória estão " +
+      "muito próximas. ";
 
   }
 
 
+  if(probMais25 >= 60){
+
+    analise +=
+      "O modelo aponta cenário favorável " +
+      "para pelo menos 3 gols. ";
+
+  }
+
+  else if(probMais25 <= 40){
+
+    analise +=
+      "O modelo aponta um cenário mais " +
+      "contido em gols. ";
+
+  }
+
+  else{
+
+    analise +=
+      "O mercado de gols acima de 2.5 " +
+      "aparece equilibrado. ";
+
+  }
+
+
+  if(probAmbas >= 60){
+
+    analise +=
+      "Há probabilidade elevada de ambas " +
+      "as equipes marcarem.";
+
+  }
+
+  else{
+
+    analise +=
+      "A probabilidade de ambas marcarem " +
+      "não aparece como predominante.";
+
+  }
+
+
+  /*
+   * ATUALIZA A TELA
+   */
+
   document.getElementById(
     "vitoriaCasa"
   ).textContent =
-    casaProb + "%";
+    probCasa + "%";
 
 
   document.getElementById(
     "empate"
   ).textContent =
-    empateProb + "%";
+    probEmpate + "%";
 
 
   document.getElementById(
     "vitoriaFora"
   ).textContent =
-    foraProb + "%";
+    probFora + "%";
 
 
   document.getElementById(
     "mais15"
   ).textContent =
-    mais15 + "%";
+    probMais15 + "%";
 
 
   document.getElementById(
     "mais25"
   ).textContent =
-    mais25 + "%";
+    probMais25 + "%";
 
 
   document.getElementById(
     "ambas"
   ).textContent =
-    ambas + "%";
+    probAmbas + "%";
 
 
   document.getElementById(
     "totalGols"
   ).textContent =
-    total + " gols";
+    totalEsperado.toFixed(2) +
+    " gols";
 
 
   document.getElementById(
     "placar"
   ).textContent =
-    golsCasa +
+    placarCasa +
     " x " +
-    golsFora;
+    placarFora;
 
 
   document.getElementById(
@@ -1465,7 +1789,12 @@ function gerarPalpite(){
     behavior:"smooth"
   });
 
-}
+  }
+
+
+
+
+
 
 </script>
 
