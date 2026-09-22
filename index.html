@@ -1722,24 +1722,23 @@ function criarJogo(fixture) {
 
   let placar = "";
 
-  if (
-    info.status &&
-    info.status.short !== "NS" &&
-    fixture.goals
-  ) {
+ if (
+  fixture.goals &&
+  typeof fixture.goals.home === "number" &&
+  typeof fixture.goals.away === "number"
+)  {
 
-    const golsCasa =
-      fixture.goals.home ?? 0;
-
-    const golsFora =
-      fixture.goals.away ?? 0;
+    const golsCasa = fixture.goals.home;
+const golsFora = fixture.goals.away;
 
     placar =
       `<div style="
         margin-top:8px;
         font-size:22px;
-        color:#39ff68;
-        font-weight:900;
+line-height:1.2;
+white-space:nowrap;
+color:#39ff68;
+font-weight:900;
       ">
         ${golsCasa} × ${golsFora}
       </div>`;
