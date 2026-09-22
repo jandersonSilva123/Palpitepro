@@ -1053,7 +1053,12 @@ function atualizarTimes(){
 
 }
 
-async function gerarPalpite(){
+async function gerarPalpite(){  
+
+ if (fixtureSelecionado) {
+    await gerarAnaliseReal(fixtureSelecionado);
+    return;
+  }
 
   const casa =
     document.getElementById("timeCasa").value.trim();
@@ -1895,9 +1900,10 @@ function criarJogo(fixture) {
         font-size:14px;
       "
       onclick="selecionarJogo(
-        '${String(home.name).replace(/'/g, "\\'")}',
-        '${String(away.name).replace(/'/g, "\\'")}'
-      )"
+  '${String(home.name).replace(/'/g, "\\'")}',
+  '${String(away.name).replace(/'/g, "\\'")}',
+  '${info.id}'
+)"
     >
 
       🔎 Ver análise
@@ -1912,13 +1918,16 @@ function criarJogo(fixture) {
 }
 
 
-function selecionarJogo(casa, fora) {
+let fixtureSelecionado = null;
 
-  document.getElementById("timeCasa").value =
-    casa;
 
-  document.getElementById("timeFora").value =
-    fora;
+function selecionarJogo(casa, fora, fixtureId) {
+
+  fixtureSelecionado = fixtureId;
+
+  document.getElementById("timeCasa").value = casa;
+
+  document.getElementById("timeFora").value = fora;
 
   atualizarTimes();
 
@@ -2144,7 +2153,182 @@ async function carregarJogos() {
 
 // Carrega os jogos quando a página abre
 carregarJogos();
+async function gerarAnaliseReal(fixtureId) {
 
+  const erro =
+    document.getElementById("erro");
+
+  erro.style.display = "none";
+
+  try {
+
+    const resposta =
+      await fetch(
+        API_GOLZEN +
+        "?endpoint=predictions&fixture=" +
+        fixtureId
+      );
+
+    if (!resposta.ok) {
+      throw new Error(
+        "Erro HTTP " + resposta.status
+      );
+    }
+
+    const dados =
+      await resposta.json();
+
+    if (
+      dados.errors &&
+      Object.keys(dados.errors).length
+    ) {
+      throw new Error(
+        JSON.stringify(dados.errors)
+      );
+    }
+
+    if (
+      !dados.response ||
+      !dados.response.length
+    ) {
+      throw new Error(
+        "Nenhuma previsão encontrada para esta partida."
+      );
+    }
+
+    const previsao =
+      dados.response[0];
+
+    const prediction =
+      previsao.prediction || {};
+
+    const teams =
+      previsao.teams || {};
+
+    const casa =
+      teams.home?.name ||
+      document.getElementById("timeCasa").value;
+
+    const fora =
+      teams.away?.name ||
+      document.getElementById("timeFora").value;
+
+
+    const vencedor =
+      prediction.winner?.name;
+
+
+    const porcentagens =
+      prediction.percent;
+
+
+    let probCasa = "--";
+    let probEmpate = "--";
+    let probFora = "--";
+
+
+    if (porcentagens) {
+
+      probCasa =
+        porcentagens.home || "--";
+
+      probEmpate =
+        porcentagens.draw || "--";
+
+      probFora =
+        porcentagens.away || "--";
+
+    }
+
+
+    let tendencia =
+      "⚖️ Empate";
+
+
+    if (vencedor) {
+
+      tendencia =
+        "🎯 " + vencedor;
+
+    }
+
+
+    const placar =
+      prediction.goals?.home != null &&
+      prediction.goals?.away != null
+        ? prediction.goals.home +
+          " x " +
+          prediction.goals.away
+        : "--";
+
+
+    document.getElementById(
+      "vitoriaCasa"
+    ).textContent =
+      probCasa;
+
+
+    document.getElementById(
+      "empate"
+    ).textContent =
+      probEmpate;
+
+
+    document.getElementById(
+      "vitoriaFora"
+    ).textContent =
+      probFora;
+
+
+    document.getElementById(
+      "placar"
+    ).textContent =
+      placar;
+
+
+    document.getElementById(
+      "tendencia"
+    ).textContent =
+      tendencia;
+
+
+    document.getElementById(
+      "analise"
+    ).textContent =
+      "O GolZen está utilizando a previsão " +
+      "fornecida pela API-Football para " +
+      casa +
+      " x " +
+      fora +
+      ". " +
+      (prediction.advice ||
+       "A previsão está disponível para esta partida.");
+
+
+    document.getElementById(
+      "resultado"
+    ).classList.add("show");
+
+
+    document.getElementById(
+      "resultado"
+    ).scrollIntoView({
+      behavior: "smooth"
+    });
+
+
+  } catch (erroAPI) {
+
+    console.error(erroAPI);
+
+    erro.style.display = "block";
+
+    erro.textContent =
+      "⚠️ Não foi possível gerar a análise desta partida. Tente novamente.";
+
+  }
+
+}
 
 // Atualiza automaticamente a cada 5 minutos
 setInterval(
