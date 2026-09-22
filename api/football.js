@@ -19,14 +19,15 @@ module.exports = async (req, res) => {
   const endpoint = req.query.endpoint || "fixtures";
 
   // Endpoints permitidos pela GolZen
-  const permitidos = [
-    "fixtures",
-    "teams",
-    "standings",
-    "players",
-    "injuries",
-    "odds"
-  ];
+const permitidos = [
+  "fixtures",
+  "teams",
+  "standings",
+  "players",
+  "injuries",
+  "odds",
+  "predictions"
+];
 
   if (!permitidos.includes(endpoint)) {
     return res.status(400).json({
