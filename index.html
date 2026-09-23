@@ -2153,63 +2153,33 @@ async function carregarJogos() {
 // Carrega os jogos quando a página abre
 carregarJogos();
 
-async function gerarAnaliseReal(fixtureId) {
 
-  const erro =
-    document.getElementById("erro");
+ 
+ async function gerarAnaliseReal(fixtureId) {
+
+  const erro = document.getElementById("erro");
 
   erro.style.display = "none";
 
   try {
 
     /* =========================
-       BUSCAR PREVISÃO
+       BUSCAR DADOS DA PARTIDA
     ========================= */
 
-    const respostaPred =
-      await fetch(
-        API_GOLZEN +
-        "?endpoint=predictions&fixture=" +
-        fixtureId
-      );
+    const respostaFixture = await fetch(
+      API_GOLZEN +
+      "?endpoint=fixtures&ids=" +
+      fixtureId
+    );
 
-    const dadosPred =
-      await respostaPred.json();
+    const dadosFixture = await respostaFixture.json();
 
+    const fixtureAtual =
+      dadosFixture.response?.[0];
 
-    /* =========================
-       BUSCAR ESTATÍSTICAS
-    ========================= */
-
-    const respostaStats =
-      await fetch(
-        API_GOLZEN +
-        "?endpoint=fixtures/statistics&fixture=" +
-        fixtureId
-      );
-
-    const dadosStats =
-      await respostaStats.json();
-
-
-    /* =========================
-       PREVISÃO
-    ========================= */
-
-    let prediction = null;
-    let previsao = null;
-
-    if (
-      dadosPred.response &&
-      dadosPred.response.length
-    ) {
-
-      previsao =
-        dadosPred.response[0];
-
-      prediction =
-        previsao.prediction || {};
-
+    if (!fixtureAtual) {
+      throw new Error("Partida não encontrada");
     }
 
 
@@ -2217,51 +2187,270 @@ async function gerarAnaliseReal(fixtureId) {
        TIMES
     ========================= */
 
-    let casa =
-      document.getElementById(
-        "timeCasa"
-      ).value;
+    const casa =
+      fixtureAtual.teams?.home?.name ||
+      document.getElementById("timeCasa").value ||
+      "Mandante";
 
-    let fora =
-      document.getElementById(
-        "timeFora"
-      ).value;
+    const fora =
+      fixtureAtual.teams?.away?.name ||
+      document.getElementById("timeFora").value ||
+      "Visitante";
+
+    const idCasa =
+      fixtureAtual.teams?.home?.id;
+
+    const idFora =
+      fixtureAtual.teams?.away?.id;
 
 
-    if (previsao && previsao.teams) {
+    /* =========================
+       BUSCAR ÚLTIMOS 5 JOGOS
+    ========================= */
 
-      casa =
-        previsao.teams.home?.name ||
-        casa;
+    let jogosCasa = [];
+    let jogosFora = [];
 
-      fora =
-        previsao.teams.away?.name ||
-        fora;
+    if (idCasa) {
+
+      const respostaCasa = await fetch(
+        API_GOLZEN +
+        "?endpoint=fixtures&team=" +
+        idCasa +
+        "&last=5"
+      );
+
+      const dadosCasa =
+        await respostaCasa.json();
+
+      jogosCasa =
+        dadosCasa.response || [];
+
+    }
+
+
+    if (idFora) {
+
+      const respostaFora = await fetch(
+        API_GOLZEN +
+        "?endpoint=fixtures&team=" +
+        idFora +
+        "&last=5"
+      );
+
+      const dadosFora =
+        await respostaFora.json();
+
+      jogosFora =
+        dadosFora.response || [];
 
     }
 
 
     /* =========================
-       PROBABILIDADES
+       CALCULAR FORM
     ========================= */
 
-    let probCasa = "--";
-    let probEmpate = "--";
-    let probFora = "--";
+    function calcularForma(jogos, idTime) {
+
+      let golsMarcados = 0;
+      let golsSofridos = 0;
+
+      let vitorias = 0;
+      let empates = 0;
+      let derrotas = 0;
+
+      let over15 = 0;
+      let over25 = 0;
+      let ambas = 0;
+
+      jogos.forEach(jogo => {
+
+        const golsCasa =
+          Number(jogo.goals?.home ?? 0);
+
+        const golsFora =
+          Number(jogo.goals?.away ?? 0);
+
+        const timeCasa =
+          jogo.teams?.home?.id;
+
+        const timeFora =
+          jogo.teams?.away?.id;
+
+        let marcados = 0;
+        let sofridos = 0;
+
+        if (timeCasa === idTime) {
+
+          marcados = golsCasa;
+          sofridos = golsFora;
+
+        } else if (timeFora === idTime) {
+
+          marcados = golsFora;
+          sofridos = golsCasa;
+
+        } else {
+          return;
+        }
+
+
+        golsMarcados += marcados;
+        golsSofridos += sofridos;
+
+
+        if (marcados > sofridos) {
+          vitorias++;
+
+        } else if (marcados === sofridos) {
+          empates++;
+
+        } else {
+          derrotas++;
+        }
+
+
+        const total =
+          golsCasa + golsFora;
+
+
+        if (total >= 2) {
+          over15++;
+        }
+
+        if (total >= 3) {
+          over25++;
+        }
+
+        if (
+          golsCasa > 0 &&
+          golsFora > 0
+        ) {
+          ambas++;
+        }
+
+      });
+
+
+      const quantidade = jogos.length || 1;
+
+
+      return {
+
+        golsMarcados,
+        golsSofridos,
+
+        mediaMarcados:
+          golsMarcados / quantidade,
+
+        mediaSofridos:
+          golsSofridos / quantidade,
+
+        vitorias,
+        empates,
+        derrotas,
+
+        over15,
+        over25,
+        ambas,
+
+        jogos:
+          jogos.length
+
+      };
+
+    }
+
+
+    const formaCasa =
+      calcularForma(jogosCasa, idCasa);
+
+    const formaFora =
+      calcularForma(jogosFora, idFora);
+
+
+    /* =========================
+       PROBABILIDADES GOLZEN
+    ========================= */
+
+    let forcaCasa =
+      formaCasa.mediaMarcados -
+      formaCasa.mediaSofridos;
+
+    let forcaFora =
+      formaFora.mediaMarcados -
+      formaFora.mediaSofridos;
+
+
+    if (!isFinite(forcaCasa)) {
+      forcaCasa = 0;
+    }
+
+    if (!isFinite(forcaFora)) {
+      forcaFora = 0;
+    }
+
+
+    let probCasa = 33;
+    let probEmpate = 34;
+    let probFora = 33;
+
 
     if (
-      prediction &&
-      prediction.percent
+      formaCasa.jogos > 0 &&
+      formaFora.jogos > 0
     ) {
 
-      probCasa =
-        prediction.percent.home || "--";
+      const vantagemCasa =
+        forcaCasa + 0.25;
 
-      probEmpate =
-        prediction.percent.draw || "--";
+      const vantagemFora =
+        forcaFora;
+
+      const totalForca =
+        Math.abs(vantagemCasa) +
+        Math.abs(vantagemFora) +
+        1;
+
+
+      probCasa =
+        Math.round(
+          33 +
+          (vantagemCasa / totalForca) * 20
+        );
+
 
       probFora =
-        prediction.percent.away || "--";
+        Math.round(
+          33 +
+          (vantagemFora / totalForca) * 20
+        );
+
+
+      probEmpate =
+        100 -
+        probCasa -
+        probFora;
+
+
+      probCasa =
+        Math.max(
+          5,
+          Math.min(85, probCasa)
+        );
+
+      probFora =
+        Math.max(
+          5,
+          Math.min(85, probFora)
+        );
+
+      probEmpate =
+        Math.max(
+          5,
+          Math.min(85, probEmpate)
+        );
 
     }
 
@@ -2271,7 +2460,203 @@ async function gerarAnaliseReal(fixtureId) {
     ========================= */
 
     let tendencia =
-      "⚖️ Dados insuficientes";
+      "⚖️ Equilíbrio";
+
+    if (
+      probCasa >
+      probFora &&
+      probCasa >
+      probEmpate
+    ) {
+
+      tendencia =
+        "🏠 " + casa;
+
+    } else if (
+      probFora >
+      probCasa &&
+      probFora >
+      probEmpate
+    ) {
+
+      tendencia =
+        "✈️ " + fora;
+
+    }
+
+
+    /* =========================
+       MÉDIA DE GOLS
+    ========================= */
+
+    const mediaGols =
+      (
+        formaCasa.mediaMarcados +
+        formaCasa.mediaSofridos +
+        formaFora.mediaMarcados +
+        formaFora.mediaSofridos
+      ) / 2;
+
+
+    let mais15 = "--";
+    let mais25 = "--";
+
+    if (
+      formaCasa.jogos > 0 ||
+      formaFora.jogos > 0
+    ) {
+
+      const jogosAnalisados =
+        formaCasa.jogos +
+        formaFora.jogos;
+
+      const over15Total =
+        formaCasa.over15 +
+        formaFora.over15;
+
+      const over25Total =
+        formaCasa.over25 +
+        formaFora.over25;
+
+
+      if (
+        over15Total /
+        jogosAnalisados >= 0.60
+      ) {
+
+        mais15 = "SIM";
+
+      } else {
+
+        mais15 = "NÃO";
+
+      }
+
+
+      if (
+        over25Total /
+        jogosAnalisados >= 0.50
+      ) {
+
+        mais25 = "SIM";
+
+      } else {
+
+        mais25 = "NÃO";
+
+      }
+
+    }
+
+
+    /* =========================
+       AMBAS MARCAM
+    ========================= */
+
+    let ambas = "--";
+
+    const totalJogos =
+      formaCasa.jogos +
+      formaFora.jogos;
+
+    if (totalJogos > 0) {
+
+      const totalAmbas =
+        formaCasa.ambas +
+        formaFora.ambas;
+
+      ambas =
+        totalAmbas /
+        totalJogos >= 0.50
+          ? "SIM"
+          : "NÃO";
+
+    }
+
+
+    /* =========================
+       PLACAR ESTIMADO
+    ========================= */
+
+    const golsCasaEstimados =
+      Math.max(
+        0,
+        formaCasa.mediaMarcados
+      );
+
+    const golsForaEstimados =
+      Math.max(
+        0,
+        formaFora.mediaMarcados
+      );
+
+
+    const placar =
+      Math.round(golsCasaEstimados) +
+      " x " +
+      Math.round(golsForaEstimados);
+
+
+    /* =========================
+       BUSCAR PREDIÇÃO DA API
+    ========================= */
+
+    let prediction = null;
+
+    try {
+
+      const respostaPred =
+        await fetch(
+          API_GOLZEN +
+          "?endpoint=predictions&fixture=" +
+          fixtureId
+        );
+
+      const dadosPred =
+        await respostaPred.json();
+
+      if (
+        dadosPred.response &&
+        dadosPred.response.length
+      ) {
+
+        prediction =
+          dadosPred.response[0].prediction || null;
+
+      }
+
+    } catch (erroPred) {
+
+      console.log(
+        "Predição API indisponível."
+      );
+
+    }
+
+
+    /* =========================
+       SE EXISTIR PREDIÇÃO DA API,
+       USAR OS DADOS DELA
+    ========================= */
+
+    if (
+      prediction &&
+      prediction.percent
+    ) {
+
+      probCasa =
+        prediction.percent.home ||
+        probCasa;
+
+      probEmpate =
+        prediction.percent.draw ||
+        probEmpate;
+
+      probFora =
+        prediction.percent.away ||
+        probFora;
+
+    }
 
 
     if (
@@ -2288,86 +2673,7 @@ async function gerarAnaliseReal(fixtureId) {
 
 
     /* =========================
-       PLACAR ESTIMADO
-    ========================= */
-
-    let placar = "--";
-
-    if (
-      prediction &&
-      prediction.goals &&
-      prediction.goals.home != null &&
-      prediction.goals.away != null
-    ) {
-
-      placar =
-        prediction.goals.home +
-        " x " +
-        prediction.goals.away;
-
-    }
-
-
-    /* =========================
-       OVER / UNDER
-    ========================= */
-
-    let mais15 = "--";
-    let mais25 = "--";
-    let ambas = "--";
-
-
-    if (
-      prediction &&
-      prediction.under_over
-    ) {
-
-      if (
-        prediction.under_over
-          .toLowerCase()
-          .includes("over 1.5")
-      ) {
-
-        mais15 = "SIM";
-
-      }
-
-      if (
-        prediction.under_over
-          .toLowerCase()
-          .includes("over 2.5")
-      ) {
-
-        mais25 = "SIM";
-
-      }
-
-    }
-
-
-    if (
-      prediction &&
-      prediction.advice
-    ) {
-
-      const conselho =
-        prediction.advice
-          .toLowerCase();
-
-      if (
-        conselho.includes("both") ||
-        conselho.includes("ambas")
-      ) {
-
-        ambas = "SIM";
-
-      }
-
-    }
-
-
-    /* =========================
-       ESTATÍSTICAS
+       ESCANTEIOS / ESTATÍSTICAS
     ========================= */
 
     let escanteiosCasa = "--";
@@ -2380,117 +2686,137 @@ async function gerarAnaliseReal(fixtureId) {
     let chutesFora = "--";
 
 
-    if (
-      dadosStats.response &&
-      dadosStats.response.length
-    ) {
+    try {
 
-      dadosStats.response.forEach(
-        bloco => {
+      const respostaStats =
+        await fetch(
+          API_GOLZEN +
+          "?endpoint=fixtures/statistics&fixture=" +
+          fixtureId
+        );
 
-          const nome =
-            bloco.team?.name || "";
-
-          const estatisticas =
-            bloco.statistics || [];
+      const dadosStats =
+        await respostaStats.json();
 
 
-          estatisticas.forEach(
-            item => {
+      if (
+        dadosStats.response &&
+        dadosStats.response.length
+      ) {
 
-              const tipo =
-                item.type;
+        dadosStats.response.forEach(
+          bloco => {
 
-              const valor =
-                item.value;
+            const nome =
+              bloco.team?.name || "";
+
+            const estatisticas =
+              bloco.statistics || [];
 
 
-              if (
-                tipo === "Corner Kicks"
-              ) {
+            estatisticas.forEach(
+              item => {
+
+                const tipo =
+                  item.type;
+
+                const valor =
+                  item.value;
+
 
                 if (
-                  nome === casa
+                  tipo === "Corner Kicks"
                 ) {
 
-                  escanteiosCasa =
-                    valor ?? "--";
+                  if (
+                    nome === casa
+                  ) {
+
+                    escanteiosCasa =
+                      valor ?? "--";
+
+                  }
+
+                  if (
+                    nome === fora
+                  ) {
+
+                    escanteiosFora =
+                      valor ?? "--";
+
+                  }
 
                 }
 
+
                 if (
-                  nome === fora
+                  tipo === "Ball Possession"
                 ) {
 
-                  escanteiosFora =
-                    valor ?? "--";
+                  if (
+                    nome === casa
+                  ) {
+
+                    posseCasa =
+                      valor ?? "--";
+
+                  }
+
+                  if (
+                    nome === fora
+                  ) {
+
+                    posseFora =
+                      valor ?? "--";
+
+                  }
+
+                }
+
+
+                if (
+                  tipo === "Total Shots"
+                ) {
+
+                  if (
+                    nome === casa
+                  ) {
+
+                    chutesCasa =
+                      valor ?? "--";
+
+                  }
+
+                  if (
+                    nome === fora
+                  ) {
+
+                    chutesFora =
+                      valor ?? "--";
+
+                  }
 
                 }
 
               }
+            );
 
+          }
+        );
 
-              if (
-                tipo === "Ball Possession"
-              ) {
+      }
 
-                if (
-                  nome === casa
-                ) {
+    } catch (erroStats) {
 
-                  posseCasa =
-                    valor ?? "--";
-
-                }
-
-                if (
-                  nome === fora
-                ) {
-
-                  posseFora =
-                    valor ?? "--";
-
-                }
-
-              }
-
-
-              if (
-                tipo === "Total Shots"
-              ) {
-
-                if (
-                  nome === casa
-                ) {
-
-                  chutesCasa =
-                    valor ?? "--";
-
-                }
-
-                if (
-                  nome === fora
-                ) {
-
-                  chutesFora =
-                    valor ?? "--";
-
-                }
-
-              }
-
-            }
-
-          );
-
-        }
+      console.log(
+        "Estatísticas não disponíveis."
       );
 
     }
 
 
     /* =========================
-       TOTAL DE ESCANTEIOS
+       TOTAL ESCANTEIOS
     ========================= */
 
     let totalEscanteios = "--";
@@ -2508,25 +2834,25 @@ async function gerarAnaliseReal(fixtureId) {
 
 
     /* =========================
-       PREENCHER TELA
+       PREENCHER CARDS
     ========================= */
 
     document.getElementById(
       "vitoriaCasa"
     ).textContent =
-      probCasa;
+      probCasa + "%";
 
 
     document.getElementById(
       "empate"
     ).textContent =
-      probEmpate;
+      probEmpate + "%";
 
 
     document.getElementById(
       "vitoriaFora"
     ).textContent =
-      probFora;
+      probFora + "%";
 
 
     document.getElementById(
@@ -2550,16 +2876,8 @@ async function gerarAnaliseReal(fixtureId) {
     document.getElementById(
       "totalGols"
     ).textContent =
-      prediction?.goals
-        ? (
-            Number(
-              prediction.goals.home || 0
-            ) +
-            Number(
-              prediction.goals.away || 0
-            )
-          ).toFixed(2) + " gols"
-        : "--";
+      mediaGols.toFixed(2) +
+      " gols";
 
 
     document.getElementById(
@@ -2575,7 +2893,7 @@ async function gerarAnaliseReal(fixtureId) {
 
 
     /* =========================
-       TEXTO DA ANÁLISE
+       TEXTO FINAL DA ANÁLISE
     ========================= */
 
     let texto =
@@ -2586,29 +2904,46 @@ async function gerarAnaliseReal(fixtureId) {
       ". ";
 
 
-    if (prediction?.advice) {
+    texto +=
+      "Nos últimos jogos analisados, " +
+      casa +
+      " marcou em média " +
+      formaCasa.mediaMarcados.toFixed(2) +
+      " gols e sofreu " +
+      formaCasa.mediaSofridos.toFixed(2) +
+      ". ";
 
-      texto +=
-        prediction.advice +
-        ". ";
 
-    }
+    texto +=
+      fora +
+      " marcou em média " +
+      formaFora.mediaMarcados.toFixed(2) +
+      " gols e sofreu " +
+      formaFora.mediaSofridos.toFixed(2) +
+      ". ";
+
+
+    texto +=
+      "📈 Tendência: " +
+      tendencia +
+      ". ";
+
+
+    texto +=
+      "⚽ Média estimada de gols: " +
+      mediaGols.toFixed(2) +
+      ".";
 
 
     if (
-      escanteiosCasa !== "--" ||
-      escanteiosFora !== "--"
+      totalEscanteios !== "--"
     ) {
 
       texto +=
-        "🚩 Escanteios registrados: " +
+        " 🚩 Escanteios registrados: " +
         escanteiosCasa +
-        " para " +
-        casa +
-        " e " +
+        " x " +
         escanteiosFora +
-        " para " +
-        fora +
         ".";
 
     }
