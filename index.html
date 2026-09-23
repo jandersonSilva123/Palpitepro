@@ -1919,17 +1919,36 @@ font-weight:900;
 
 let fixtureSelecionado = null;
 
-
 function selecionarJogo(casa, fora, fixtureId) {
 
-  fixtureSelecionado = fixtureId;
+  // Guarda a partida selecionada
+  fixtureSelecionado = String(fixtureId);
 
+  // Preenche os times
   document.getElementById("timeCasa").value = casa;
-
   document.getElementById("timeFora").value = fora;
 
+  // Atualiza o confronto visual
   atualizarTimes();
 
+  // Limpa resultado anterior
+  const resultado =
+    document.getElementById("resultado");
+
+  if (resultado) {
+    resultado.classList.remove("show");
+  }
+
+  // Limpa mensagem de erro
+  const erro =
+    document.getElementById("erro");
+
+  if (erro) {
+    erro.style.display = "none";
+    erro.textContent = "";
+  }
+
+  // Vai para a área de palpites
   document
     .getElementById("palpites")
     .scrollIntoView({
@@ -1937,6 +1956,7 @@ function selecionarJogo(casa, fora, fixtureId) {
     });
 
 }
+
 
 
 async function carregarJogos() {
