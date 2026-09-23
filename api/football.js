@@ -26,8 +26,8 @@ const permitidos = [
   "players",
   "injuries",
   "odds",
-  "predictions"
-"fixtures/statistics"
+  "predictions",
+  "fixtures/statistics"
 ];
 
   if (!permitidos.includes(endpoint)) {
