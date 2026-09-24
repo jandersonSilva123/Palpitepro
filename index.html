@@ -2224,47 +2224,105 @@ fixtureId
       fixtureAtual.teams?.away?.id;
 
 
-    /* =========================
-       BUSCAR ÚLTIMOS 5 JOGOS
-    ========================= */
+  /* =========================
+   BUSCAR HISTÓRICO DOS TIMES
+========================= */
 
-    let jogosCasa = [];
-    let jogosFora = [];
+async function buscarHistoricoTime(idTime) {
 
-    if (idCasa) {
+  if (!idTime) {
+    return [];
+  }
 
-      const respostaCasa = await fetch(
-        API_GOLZEN +
-        "?endpoint=fixtures&team=" +
-        idCasa +
-        "&last=5"
+  try {
+
+    const resposta = await fetch(
+      API_GOLZEN +
+      "?endpoint=fixtures" +
+      "&team=" +
+      idTime +
+      "&last=10"
+    );
+
+    if (!resposta.ok) {
+      console.log(
+        "Erro histórico HTTP:",
+        resposta.status
       );
-
-      const dadosCasa =
-        await respostaCasa.json();
-
-      jogosCasa =
-        dadosCasa.response || [];
-
+      return [];
     }
 
+    const dados = await resposta.json();
 
-    if (idFora) {
+    if (
+      dados.errors &&
+      Object.keys(dados.errors).length
+    ) {
 
-      const respostaFora = await fetch(
-        API_GOLZEN +
-        "?endpoint=fixtures&team=" +
-        idFora +
-        "&last=5"
+      console.log(
+        "Erro API histórico:",
+        dados.errors
       );
 
-      const dadosFora =
-        await respostaFora.json();
-
-      jogosFora =
-        dadosFora.response || [];
-
+      return [];
     }
+
+    return (dados.response || []).filter(jogo => {
+
+      const status =
+        jogo.fixture?.status?.short;
+
+      const golsCasa =
+        jogo.goals?.home;
+
+      const golsFora =
+        jogo.goals?.away;
+
+      // Somente partidas já encerradas
+      const encerrado =
+        [
+          "FT",
+          "AET",
+          "PEN"
+        ].includes(status);
+
+      return (
+        encerrado &&
+        golsCasa !== null &&
+        golsFora !== null
+      );
+
+    });
+
+  } catch (erro) {
+
+    console.log(
+      "Erro ao buscar histórico:",
+      erro
+    );
+
+    return [];
+
+  }
+
+}
+
+
+const jogosCasa =
+  await buscarHistoricoTime(idCasa);
+
+
+const jogosFora =
+  await buscarHistoricoTime(idFora);
+
+
+console.log(
+  "Histórico GolZen:",
+  casa,
+  jogosCasa.length,
+  fora,
+  jogosFora.length
+);
 
 
     /* =========================
@@ -2515,7 +2573,7 @@ fixtureId
         formaCasa.mediaSofridos +
         formaFora.mediaMarcados +
         formaFora.mediaSofridos
-      ) / 2;
+      ) / 4;
 
 
     let mais15 = "--";
