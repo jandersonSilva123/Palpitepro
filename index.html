@@ -1,0 +1,3240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GolZen — Análise Esportiva</title>
+
+<meta name="theme-color" content="#07130d">
+<meta name="description" content="GolZen - análises, estatísticas e palpites de futebol">
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#07130d;
+  color:#fff;
+  min-height:100vh;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:#081810;
+  border-bottom:1px solid #173b27;
+  padding:14px 16px;
+}
+
+.header-inner{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:900;
+  color:#39e58c;
+}
+
+.logo span{
+  color:#fff;
+}
+
+nav{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+nav a{
+  padding:8px 11px;
+  border-radius:9px;
+  color:#b8c9bf;
+  font-size:13px;
+}
+
+nav a:hover{
+  background:#123321;
+  color:#39e58c;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+  width:min(1100px,94%);
+  margin:auto;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  padding:45px 0 30px;
+  text-align:center;
+}
+
+.hero h1{
+  font-size:clamp(32px,8vw,58px);
+  line-height:1;
+  margin-bottom:15px;
+}
+
+.hero h1 span{
+  color:#39e58c;
+}
+
+.hero p{
+  max-width:650px;
+  margin:auto;
+  color:#a9bbb0;
+  line-height:1.6;
+  font-size:15px;
+}
+
+/* =========================
+   SEÇÕES
+========================= */
+
+.section{
+  padding:25px 0 40px;
+}
+
+.section-title{
+  margin-bottom:18px;
+}
+
+.section-title h2{
+  font-size:24px;
+}
+
+.section-title p{
+  color:#81968a;
+  font-size:13px;
+  margin-top:5px;
+}
+
+/* =========================
+   JOGOS
+========================= */
+
+.games-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  gap:14px;
+}
+
+.game-card{
+  background:#0b1d14;
+  border:1px solid #173b27;
+  border-radius:16px;
+  padding:16px;
+  transition:.2s;
+}
+
+.game-card:hover{
+  border-color:#2bbf72;
+  transform:translateY(-2px);
+}
+
+.game-date{
+  display:flex;
+  justify-content:space-between;
+  color:#7f998a;
+  font-size:11px;
+  margin-bottom:15px;
+}
+
+.teams{
+  display:grid;
+  grid-template-columns:1fr 45px 1fr;
+  align-items:center;
+  gap:8px;
+}
+
+.team{
+  text-align:center;
+}
+
+.team img{
+  width:48px;
+  height:48px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 7px;
+}
+
+.team-name{
+  font-size:13px;
+  font-weight:bold;
+  line-height:1.3;
+}
+
+.vs{
+  text-align:center;
+  color:#39e58c;
+  font-weight:bold;
+  font-size:12px;
+}
+
+.game-status{
+  text-align:center;
+  color:#8fa69a;
+  font-size:11px;
+  margin-top:12px;
+}
+
+.btn-game{
+  width:100%;
+  margin-top:14px;
+  padding:11px;
+  border:0;
+  border-radius:10px;
+  background:#153b27;
+  color:#5df0a2;
+  font-weight:bold;
+}
+
+.btn-game:hover{
+  background:#1b5033;
+}
+
+/* =========================
+   PALPITE
+========================= */
+
+.form-box{
+  background:#0b1d14;
+  border:1px solid #173b27;
+  border-radius:18px;
+  padding:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field label{
+  font-size:12px;
+  color:#91a99a;
+}
+
+.field input,
+.field select{
+  width:100%;
+  padding:13px;
+  border-radius:10px;
+  border:1px solid #214b32;
+  background:#07130d;
+  color:#fff;
+  outline:none;
+}
+
+.field input:focus,
+.field select:focus{
+  border-color:#39e58c;
+}
+
+.btn-primary{
+  width:100%;
+  margin-top:16px;
+  padding:14px;
+  border:0;
+  border-radius:11px;
+  background:#39e58c;
+  color:#041008;
+  font-weight:900;
+  font-size:15px;
+}
+
+.btn-primary:hover{
+  background:#58f3a1;
+}
+
+.btn-secondary{
+  margin-top:10px;
+  width:100%;
+  padding:11px;
+  border:1px solid #28583b;
+  border-radius:10px;
+  background:#10271a;
+  color:#a9c9b5;
+}
+
+/* =========================
+   ERRO
+========================= */
+
+#erro{
+  display:none;
+  margin-top:15px;
+  padding:13px;
+  border-radius:10px;
+  background:#3a1717;
+  border:1px solid #713131;
+  color:#ffb2b2;
+  font-size:13px;
+}
+
+/* =========================
+   RESULTADO
+========================= */
+
+#resultado{
+  display:none;
+  margin-top:25px;
+}
+
+#resultado.show{
+  display:block;
+}
+
+.result-head{
+  background:#0b1d14;
+  border:1px solid #173b27;
+  border-radius:18px;
+  padding:20px;
+  text-align:center;
+}
+
+.result-head h2{
+  font-size:22px;
+}
+
+.tendencia{
+  margin-top:10px;
+  color:#39e58c;
+  font-weight:bold;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:14px;
+}
+
+.card{
+  background:#0b1d14;
+  border:1px solid #173b27;
+  border-radius:15px;
+  padding:17px;
+  text-align:center;
+}
+
+.card-label{
+  color:#82988b;
+  font-size:11px;
+  margin-bottom:8px;
+}
+
+.card-value{
+  color:#fff;
+  font-size:22px;
+  font-weight:900;
+}
+
+.card-value.green{
+  color:#39e58c;
+}
+
+.score-card{
+  margin-top:14px;
+  background:#0b1d14;
+  border:1px solid #173b27;
+  border-radius:17px;
+  padding:22px;
+  text-align:center;
+}
+
+.score-label{
+  color:#82988b;
+  font-size:12px;
+  margin-bottom:8px;
+}
+
+.score{
+  font-size:42px;
+  font-weight:900;
+  color:#39e58c;
+}
+
+.analysis-box{
+  margin-top:14px;
+  background:#0b1d14;
+  border:1px solid #173b27;
+  border-radius:17px;
+  padding:20px;
+}
+
+.analysis-box h3{
+  margin-bottom:10px;
+}
+
+#analise{
+  color:#b3c5ba;
+  line-height:1.7;
+  font-size:14px;
+}
+
+/* =========================
+   ESTATÍSTICAS
+========================= */
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:14px;
+}
+
+.stat{
+  background:#081810;
+  border-radius:12px;
+  padding:12px;
+  text-align:center;
+}
+
+.stat-label{
+  display:block;
+  color:#71877a;
+  font-size:10px;
+  margin-bottom:5px;
+}
+
+.stat-value{
+  color:#d9e8df;
+  font-weight:bold;
+  font-size:14px;
+}
+
+/* =========================
+   CARREGANDO
+========================= */
+
+.loading{
+  text-align:center;
+  padding:25px;
+  color:#8da496;
+}
+
+.spinner{
+  width:28px;
+  height:28px;
+  border:3px solid #173b27;
+  border-top-color:#39e58c;
+  border-radius:50%;
+  animation:girar .8s linear infinite;
+  margin:0 auto 10px;
+}
+
+@keyframes girar{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* =========================
+   RODAPÉ
+========================= */
+
+footer{
+  margin-top:30px;
+  padding:30px 15px;
+  text-align:center;
+  border-top:1px solid #173b27;
+  color:#667c70;
+  font-size:12px;
+}
+
+footer strong{
+  color:#39e58c;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+  header{
+    padding:12px;
+  }
+
+  .header-inner{
+    align-items:flex-start;
+  }
+
+  .logo{
+    font-size:21px;
+  }
+
+  nav{
+    gap:3px;
+  }
+
+  nav a{
+    padding:6px;
+    font-size:11px;
+  }
+
+  .hero{
+    padding:35px 0 20px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stats-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .score{
+    font-size:36px;
+  }
+}
+
+@media(max-width:380px){
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+
+    <div class="logo">
+      Gol<span>Zen</span>
+    </div>
+
+    <nav>
+      <a href="#jogos">Jogos</a>
+      <a href="#palpites">Análise</a>
+      <a href="times-golzen.html">Times</a>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="container">
+    <h1>
+      Gol<span>Zen</span>
+    </h1>
+
+    <p>
+      Análise de futebol baseada em dados,
+      histórico das equipes, probabilidades,
+      gols e estatísticas da partida.
+    </p>
+  </div>
+</section>
+
+<section class="section" id="jogos">
+
+  <div class="container">
+
+    <div class="section-title">
+      <h2>⚽ Jogos de hoje</h2>
+      <p>
+        Partidas disponíveis na API-Football.
+      </p>
+    </div>
+
+    <div id="listaJogos">
+      <div class="loading">
+        <div class="spinner"></div>
+        Carregando jogos...
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="section" id="palpites">
+
+  <div class="container">
+
+    <div class="section-title">
+      <h2>🎯 Analisar partida</h2>
+      <p>
+        Escolha uma partida ou informe os dois times.
+      </p>
+    </div>
+
+    <div class="form-box">
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label for="timeCasa">
+            Time mandante
+          </label>
+
+          <input
+            id="timeCasa"
+            type="text"
+            placeholder="Ex.: Flamengo"
+            oninput="atualizarTimes()"
+          >
+        </div>
+
+        <div class="field">
+          <label for="timeFora">
+            Time visitante
+          </label>
+
+          <input
+            id="timeFora"
+            type="text"
+            placeholder="Ex.: Palmeiras"
+            oninput="atualizarTimes()"
+          >
+        </div>
+
+        <div class="field">
+          <label for="localJogo">
+            Local da partida
+          </label>
+
+          <select id="localJogo">
+            <option value="casa">
+              Mandante em casa
+            </option>
+
+            <option value="neutro">
+              Campo neutro
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <button
+        class="btn-primary"
+        id="btnAnalisar"
+        onclick="gerarPalpite()"
+      >
+        🔎 GERAR ANÁLISE
+      </button>
+
+      <button
+        class="btn-secondary"
+        onclick="limparAnalise()"
+      >
+        Limpar
+      </button>
+
+      <div id="erro"></div>
+
+    </div>
+
+    <div id="resultado">
+
+      <div class="result-head">
+
+        <h2 id="tituloPartida">
+          Análise da partida
+        </h2>
+
+        <div
+          class="tendencia"
+          id="tendencia"
+        >
+          --
+        </div>
+
+      </div>
+
+      <div class="cards">
+
+        <div class="card">
+          <div class="card-label">
+            Vitória mandante
+          </div>
+
+          <div
+            class="card-value green"
+            id="vitoriaCasa"
+          >
+            --
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">
+            Empate
+          </div>
+
+          <div
+            class="card-value"
+            id="empate"
+          >
+            --
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">
+            Vitória visitante
+          </div>
+
+          <div
+            class="card-value green"
+            id="vitoriaFora"
+          >
+            --
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">
+            Mais de 1,5 gols
+          </div>
+
+          <div
+            class="card-value"
+            id="mais15"
+          >
+            --
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">
+            Mais de 2,5 gols
+          </div>
+
+          <div
+            class="card-value"
+            id="mais25"
+          >
+            --
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">
+            Ambas marcam
+          </div>
+
+          <div
+            class="card-value"
+            id="ambas"
+          >
+            --
+          </div>
+        </div>
+
+      </div>
+
+      <div class="score-card">
+
+        <div class="score-label">
+          Total esperado de gols
+        </div>
+
+        <div
+          class="card-value"
+          id="totalGols"
+        >
+          --
+        </div>
+
+        <div class="score-label" style="margin-top:18px">
+          Placar sugerido
+        </div>
+
+        <div
+          class="score"
+          id="placar"
+        >
+          -- x --
+        </div>
+
+      </div>
+
+      <div class="stats-grid">
+
+        <div class="stat">
+          <span class="stat-label">
+            Escanteios
+          </span>
+
+          <span
+            class="stat-value"
+            id="escanteios"
+          >
+            --
+          </span>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">
+            Posse
+          </span>
+
+          <span
+            class="stat-value"
+            id="posse"
+          >
+            --
+          </span>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">
+            Finalizações
+          </span>
+
+          <span
+            class="stat-value"
+            id="chutes"
+          >
+            --
+          </span>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">
+            Histórico mandante
+          </span>
+
+          <span
+            class="stat-value"
+            id="historicoCasa"
+          >
+            --
+          </span>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">
+            Histórico visitante
+          </span>
+
+          <span
+            class="stat-value"
+            id="historicoFora"
+          >
+            --
+          </span>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">
+            Fonte
+          </span>
+
+          <span
+            class="stat-value"
+            id="fonteDados"
+          >
+            --
+          </span>
+        </div>
+
+      </div>
+
+      <div class="analysis-box">
+
+        <h3>
+          📊 Análise GolZen
+        </h3>
+
+        <div id="analise">
+          --
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  <strong>GolZen</strong> — análise esportiva baseada em dados.
+</footer>
+
+
+<script>
+
+/* =====================================================
+   GOLZEN — MOTOR PRINCIPAL
+===================================================== */
+
+const API_GOLZEN =
+  "https://palpitepro-virid.vercel.app/api/football";
+
+let fixtureSelecionado = null;
+
+
+/* =====================================================
+   ATALHO PARA ELEMENTOS
+===================================================== */
+
+function $(id){
+  return document.getElementById(id);
+}
+
+
+/* =====================================================
+   DATA DE HOJE — BRASIL
+===================================================== */
+
+function dataHoje(){
+
+  const partes =
+    new Intl.DateTimeFormat(
+      "en-CA",
+      {
+        timeZone:"America/Sao_Paulo",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
+      }
+    ).formatToParts(new Date());
+
+  const ano =
+    partes.find(x => x.type === "year")?.value;
+
+  const mes =
+    partes.find(x => x.type === "month")?.value;
+
+  const dia =
+    partes.find(x => x.type === "day")?.value;
+
+  return ano + "-" + mes + "-" + dia;
+}
+
+
+/* =====================================================
+   API GOLZEN
+===================================================== */
+
+async function apiGet(endpoint, parametros = {}){
+
+  const params =
+    new URLSearchParams();
+
+  params.set("endpoint", endpoint);
+
+  Object.entries(parametros).forEach(
+    ([chave, valor]) => {
+
+      if(
+        valor !== undefined &&
+        valor !== null &&
+        valor !== ""
+      ){
+        params.set(
+          chave,
+          String(valor)
+        );
+      }
+
+    }
+  );
+
+  const resposta =
+    await fetch(
+      API_GOLZEN +
+      "?" +
+      params.toString(),
+      {
+        cache:"no-store"
+      }
+    );
+
+  let dados = {};
+
+  try{
+
+    dados =
+      await resposta.json();
+
+  }catch(e){
+
+    dados = {};
+
+  }
+
+  if(!resposta.ok){
+
+    throw new Error(
+      "Erro HTTP " +
+      resposta.status
+    );
+
+  }
+
+  if(
+    dados.errors &&
+    Object.keys(dados.errors).length
+  ){
+
+    throw new Error(
+      "Erro da API"
+    );
+
+  }
+
+  return dados;
+}
+
+
+/* =====================================================
+   NORMALIZAR TEXTO
+===================================================== */
+
+function normalizarTexto(texto){
+
+  return String(texto || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase()
+    .trim();
+
+}
+
+
+/* =====================================================
+   CONVERTER PORCENTAGEM
+===================================================== */
+
+function porcentagem(valor){
+
+  if(valor === null || valor === undefined){
+    return null;
+  }
+
+  let texto =
+    String(valor)
+      .replace("%","")
+      .replace(",",".")
+      .trim();
+
+  const numero =
+    Number(texto);
+
+  if(!Number.isFinite(numero)){
+    return null;
+  }
+
+  if(numero > 1){
+    return numero / 100;
+  }
+
+  return numero;
+}
+
+
+/* =====================================================
+   NORMALIZAR PROBABILIDADES
+===================================================== */
+
+function normalizarProbabilidades(
+  casa,
+  empate,
+  fora
+){
+
+  let total =
+    casa +
+    empate +
+    fora;
+
+  if(
+    !Number.isFinite(total) ||
+    total <= 0
+  ){
+
+    return {
+      casa:0.33,
+      empate:0.34,
+      fora:0.33
+    };
+
+  }
+
+  casa /= total;
+  empate /= total;
+  fora /= total;
+
+  return {
+    casa,
+    empate,
+    fora
+  };
+
+}
+
+
+/* =====================================================
+   POISSON
+===================================================== */
+
+function fatorial(numero){
+
+  if(numero <= 1){
+    return 1;
+  }
+
+  let resultado = 1;
+
+  for(
+    let i = 2;
+    i <= numero;
+    i++
+  ){
+
+    resultado *= i;
+
+  }
+
+  return resultado;
+}
+
+
+function poisson(
+  gols,
+  media
+){
+
+  if(media <= 0){
+    return gols === 0 ? 1 : 0;
+  }
+
+  return Math.exp(-media) *
+    Math.pow(media,gols) /
+    fatorial(gols);
+
+}
+
+
+/* =====================================================
+   BUSCAR TIME
+===================================================== */
+
+async function buscarTime(nome){
+
+  const dados =
+    await apiGet(
+      "teams",
+      {
+        search:nome
+      }
+    );
+
+  const lista =
+    dados.response || [];
+
+  if(!lista.length){
+    return null;
+  }
+
+  const procurado =
+    normalizarTexto(nome);
+
+  const exato =
+    lista.find(item =>
+      normalizarTexto(
+        item.team?.name
+      ) === procurado
+    );
+
+  return exato || lista[0];
+
+}
+
+
+/* =====================================================
+   BUSCAR HISTÓRICO
+===================================================== */
+
+async function buscarHistoricoTime(
+  idTime
+){
+
+  if(!idTime){
+    return [];
+  }
+
+  try{
+
+    const dados =
+      await apiGet(
+        "fixtures",
+        {
+          team:idTime,
+          last:20
+        }
+      );
+
+    const resposta =
+      dados.response || [];
+
+    return resposta.filter(
+      jogo => {
+
+        const status =
+          jogo.fixture?.status?.short;
+
+        const golsCasa =
+          Number(jogo.goals?.home);
+
+        const golsFora =
+          Number(jogo.goals?.away);
+
+        const encerrado =
+          [
+            "FT",
+            "AET",
+            "PEN",
+            "AWD",
+            "WO"
+          ].includes(status);
+
+        return (
+          encerrado &&
+          Number.isFinite(golsCasa) &&
+          Number.isFinite(golsFora) &&
+          jogo.teams?.home?.id &&
+          jogo.teams?.away?.id
+        );
+
+      }
+    );
+
+  }catch(erro){
+
+    console.log(
+      "Erro histórico:",
+      erro
+    );
+
+    return [];
+
+  }
+
+}
+
+
+/* =====================================================
+   CALCULAR FORMA
+===================================================== */
+
+function calcularForma(
+  jogos,
+  idTime
+){
+
+  let golsMarcados = 0;
+  let golsSofridos = 0;
+
+  let vitorias = 0;
+  let empates = 0;
+  let derrotas = 0;
+
+  let over15 = 0;
+  let over25 = 0;
+  let ambas = 0;
+
+  const id =
+    Number(idTime);
+
+  jogos.forEach(
+    jogo => {
+
+      const golsCasa =
+        Number(jogo.goals?.home);
+
+      const golsFora =
+        Number(jogo.goals?.away);
+
+      const idCasa =
+        Number(
+          jogo.teams?.home?.id
+        );
+
+      const idFora =
+        Number(
+          jogo.teams?.away?.id
+        );
+
+      let marcados;
+      let sofridos;
+
+      if(idCasa === id){
+
+        marcados = golsCasa;
+        sofridos = golsFora;
+
+      }else if(idFora === id){
+
+        marcados = golsFora;
+        sofridos = golsCasa;
+
+      }else{
+
+        return;
+
+      }
+
+      golsMarcados += marcados;
+      golsSofridos += sofridos;
+
+      if(marcados > sofridos){
+
+        vitorias++;
+
+      }else if(marcados === sofridos){
+
+        empates++;
+
+      }else{
+
+        derrotas++;
+
+      }
+
+      const total =
+        golsCasa +
+        golsFora;
+
+      if(total >= 2){
+        over15++;
+      }
+
+      if(total >= 3){
+        over25++;
+      }
+
+      if(
+        golsCasa > 0 &&
+        golsFora > 0
+      ){
+
+        ambas++;
+
+      }
+
+    }
+  );
+
+  const quantidade =
+    jogos.length;
+
+  return {
+
+    jogos:quantidade,
+
+    golsMarcados,
+
+    golsSofridos,
+
+    mediaMarcados:
+      quantidade
+        ? golsMarcados / quantidade
+        : 0,
+
+    mediaSofridos:
+      quantidade
+        ? golsSofridos / quantidade
+        : 0,
+
+    vitorias,
+    empates,
+    derrotas,
+
+    over15,
+    over25,
+    ambas
+
+  };
+
+}
+
+
+/* =====================================================
+   MODELO DE GOLS
+===================================================== */
+
+function calcularModelo(
+  formaCasa,
+  formaFora,
+  local
+){
+
+  /*
+    Quando houver histórico,
+    usamos os dados reais.
+
+    Quando faltar histórico de um lado,
+    usamos uma média neutra de 1.35
+    para não produzir 0 x 0 artificial.
+  */
+
+  const base = 1.35;
+
+  const casaMarcados =
+    formaCasa.jogos
+      ? formaCasa.mediaMarcados
+      : base;
+
+  const casaSofridos =
+    formaCasa.jogos
+      ? formaCasa.mediaSofridos
+      : base;
+
+  const foraMarcados =
+    formaFora.jogos
+      ? formaFora.mediaMarcados
+      : base;
+
+  const foraSofridos =
+    formaFora.jogos
+      ? formaFora.mediaSofridos
+      : base;
+
+
+  /*
+    Média entre ataque próprio
+    e gols sofridos pelo adversário.
+  */
+
+  let lambdaCasa =
+    (
+      casaMarcados +
+      foraSofridos
+    ) / 2;
+
+  let lambdaFora =
+    (
+      foraMarcados +
+      casaSofridos
+    ) / 2;
+
+
+  /*
+    Vantagem de jogar em casa.
+  */
+
+  if(local !== "neutro"){
+
+    lambdaCasa *= 1.08;
+    lambdaFora *= 0.94;
+
+  }
+
+
+  /*
+    Limites de segurança.
+  */
+
+  lambdaCasa =
+    Math.max(
+      0.15,
+      Math.min(
+        4.5,
+        lambdaCasa
+      )
+    );
+
+  lambdaFora =
+    Math.max(
+      0.15,
+      Math.min(
+        4.5,
+        lambdaFora
+      )
+    );
+
+
+  /*
+    Matriz de placares
+    de 0 x 0 até 8 x 8.
+  */
+
+  const matriz = [];
+
+  let soma = 0;
+
+  for(
+    let golsCasa = 0;
+    golsCasa <= 8;
+    golsCasa++
+  ){
+
+    matriz[golsCasa] = [];
+
+    for(
+      let golsFora = 0;
+      golsFora <= 8;
+      golsFora++
+    ){
+
+      const prob =
+        poisson(
+          golsCasa,
+          lambdaCasa
+        ) *
+        poisson(
+          golsFora,
+          lambdaFora
+        );
+
+      matriz[golsCasa][golsFora] =
+        prob;
+
+      soma += prob;
+
+    }
+
+  }
+
+
+  /*
+    Normalizar matriz.
+  */
+
+  for(
+    let casa = 0;
+    casa <= 8;
+    casa++
+  ){
+
+    for(
+      let fora = 0;
+      fora <= 8;
+      fora++
+    ){
+
+      matriz[casa][fora] /=
+        soma;
+
+    }
+
+  }
+
+
+  let probCasa = 0;
+  let probEmpate = 0;
+  let probFora = 0;
+
+  let probMais15 = 0;
+  let probMais25 = 0;
+  let probAmbas = 0;
+
+  let melhorProb = -1;
+  let melhorCasa = 0;
+  let melhorFora = 0;
+
+
+  for(
+    let golsCasa = 0;
+    golsCasa <= 8;
+    golsCasa++
+  ){
+
+    for(
+      let golsFora = 0;
+      golsFora <= 8;
+      golsFora++
+    ){
+
+      const prob =
+        matriz[golsCasa][golsFora];
+
+      if(golsCasa > golsFora){
+
+        probCasa += prob;
+
+      }else if(
+        golsCasa === golsFora
+      ){
+
+        probEmpate += prob;
+
+      }else{
+
+        probFora += prob;
+
+      }
+
+      const total =
+        golsCasa +
+        golsFora;
+
+      if(total >= 2){
+        probMais15 += prob;
+      }
+
+      if(total >= 3){
+        probMais25 += prob;
+      }
+
+      if(
+        golsCasa >= 1 &&
+        golsFora >= 1
+      ){
+
+        probAmbas += prob;
+
+      }
+
+      if(prob > melhorProb){
+
+        melhorProb = prob;
+        melhorCasa = golsCasa;
+        melhorFora = golsFora;
+
+      }
+
+    }
+
+  }
+
+
+  const resultado =
+    normalizarProbabilidades(
+      probCasa,
+      probEmpate,
+      probFora
+    );
+
+
+  return {
+
+    lambdaCasa,
+    lambdaFora,
+
+    probCasa:
+      resultado.casa,
+
+    probEmpate:
+      resultado.empate,
+
+    probFora:
+      resultado.fora,
+
+    probMais15,
+    probMais25,
+    probAmbas,
+
+    placar:
+      melhorCasa +
+      " x " +
+      melhorFora,
+
+    totalGols:
+      lambdaCasa +
+      lambdaFora
+
+  };
+
+}
+
+
+/* =====================================================
+   PRÓXIMO PASSO
+===================================================== */
+<script>
+
+/* =====================================================
+   SELECIONAR PARTIDA
+===================================================== */
+
+function selecionarJogo(
+  casa,
+  fora,
+  fixtureId
+){
+
+  fixtureSelecionado =
+    String(fixtureId);
+
+  $("timeCasa").value =
+    casa;
+
+  $("timeFora").value =
+    fora;
+
+  atualizarTimes(false);
+
+  $("resultado")
+    .classList
+    .remove("show");
+
+  $("erro").style.display =
+    "none";
+
+  $("palpites")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   ATUALIZAR CAMPOS
+===================================================== */
+
+function atualizarTimes(
+  limparFixture = true
+){
+
+  if(limparFixture){
+
+    fixtureSelecionado =
+      null;
+
+  }
+
+}
+
+
+/* =====================================================
+   LIMPAR ANÁLISE
+===================================================== */
+
+function limparAnalise(){
+
+  fixtureSelecionado =
+    null;
+
+  $("timeCasa").value =
+    "";
+
+  $("timeFora").value =
+    "";
+
+  $("resultado")
+    .classList
+    .remove("show");
+
+  $("erro").style.display =
+    "none";
+
+  $("erro").textContent =
+    "";
+
+}
+
+
+/* =====================================================
+   TEXTO DE DATA
+===================================================== */
+
+function dataHoraPartida(
+  data
+){
+
+  if(!data){
+    return "--";
+  }
+
+  const d =
+    new Date(data);
+
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  ){
+
+    return "--";
+
+  }
+
+  return d.toLocaleString(
+    "pt-BR",
+    {
+      timeZone:
+        "America/Sao_Paulo",
+      day:"2-digit",
+      month:"2-digit",
+      hour:"2-digit",
+      minute:"2-digit"
+    }
+  );
+
+}
+
+
+/* =====================================================
+   STATUS DA PARTIDA
+===================================================== */
+
+function statusPartida(
+  jogo
+){
+
+  const status =
+    jogo.fixture?.status;
+
+  if(!status){
+    return "";
+  }
+
+  if(status.short === "NS"){
+    return "Não iniciada";
+  }
+
+  if(status.short === "LIVE"){
+    return "Ao vivo";
+  }
+
+  if(status.short === "HT"){
+    return "Intervalo";
+  }
+
+  if(
+    [
+      "FT",
+      "AET",
+      "PEN"
+    ].includes(status.short)
+  ){
+
+    return "Finalizada";
+
+  }
+
+  return (
+    status.long ||
+    status.short ||
+    ""
+  );
+
+}
+
+
+/* =====================================================
+   CRIAR CARD DE JOGO
+===================================================== */
+
+function criarJogo(
+  jogo
+){
+
+  const casa =
+    jogo.teams?.home;
+
+  const fora =
+    jogo.teams?.away;
+
+  if(
+    !casa ||
+    !fora
+  ){
+
+    return null;
+
+  }
+
+  const card =
+    document.createElement(
+      "article"
+    );
+
+  card.className =
+    "game-card";
+
+
+  const data =
+    document.createElement(
+      "div"
+    );
+
+  data.className =
+    "game-date";
+
+
+  const dataTexto =
+    document.createElement(
+      "span"
+    );
+
+  dataTexto.textContent =
+    dataHoraPartida(
+      jogo.fixture?.date
+    );
+
+
+  const status =
+    document.createElement(
+      "span"
+    );
+
+  status.textContent =
+    statusPartida(jogo);
+
+
+  data.appendChild(
+    dataTexto
+  );
+
+  data.appendChild(
+    status
+  );
+
+
+  const teams =
+    document.createElement(
+      "div"
+    );
+
+  teams.className =
+    "teams";
+
+
+  const timeCasa =
+    document.createElement(
+      "div"
+    );
+
+  timeCasa.className =
+    "team";
+
+
+  const logoCasa =
+    document.createElement(
+      "img"
+    );
+
+  logoCasa.src =
+    casa.logo ||
+    "";
+
+  logoCasa.alt =
+    casa.name ||
+    "Mandante";
+
+  logoCasa.onerror =
+    function(){
+
+      this.style.display =
+        "none";
+
+    };
+
+
+  const nomeCasa =
+    document.createElement(
+      "div"
+    );
+
+  nomeCasa.className =
+    "team-name";
+
+  nomeCasa.textContent =
+    casa.name ||
+    "Mandante";
+
+
+  timeCasa.appendChild(
+    logoCasa
+  );
+
+  timeCasa.appendChild(
+    nomeCasa
+  );
+
+
+  const vs =
+    document.createElement(
+      "div"
+    );
+
+  vs.className =
+    "vs";
+
+  vs.textContent =
+    "VS";
+
+
+  const timeFora =
+    document.createElement(
+      "div"
+    );
+
+  timeFora.className =
+    "team";
+
+
+  const logoFora =
+    document.createElement(
+      "img"
+    );
+
+  logoFora.src =
+    fora.logo ||
+    "";
+
+  logoFora.alt =
+    fora.name ||
+    "Visitante";
+
+  logoFora.onerror =
+    function(){
+
+      this.style.display =
+        "none";
+
+    };
+
+
+  const nomeFora =
+    document.createElement(
+      "div"
+    );
+
+  nomeFora.className =
+    "team-name";
+
+  nomeFora.textContent =
+    fora.name ||
+    "Visitante";
+
+
+  timeFora.appendChild(
+    logoFora
+  );
+
+  timeFora.appendChild(
+    nomeFora
+  );
+
+
+  teams.appendChild(
+    timeCasa
+  );
+
+  teams.appendChild(
+    vs
+  );
+
+  teams.appendChild(
+    timeFora
+  );
+
+
+  const statusJogo =
+    document.createElement(
+      "div"
+    );
+
+  statusJogo.className =
+    "game-status";
+
+  statusJogo.textContent =
+    "ID: " +
+    (
+      jogo.fixture?.id ||
+      "--"
+    );
+
+
+  const botao =
+    document.createElement(
+      "button"
+    );
+
+  botao.className =
+    "btn-game";
+
+  botao.textContent =
+    "🔎 Analisar partida";
+
+
+  botao.onclick =
+    function(){
+
+      selecionarJogo(
+        casa.name,
+        fora.name,
+        jogo.fixture.id
+      );
+
+    };
+
+
+  card.appendChild(
+    data
+  );
+
+  card.appendChild(
+    teams
+  );
+
+  card.appendChild(
+    statusJogo
+  );
+
+  card.appendChild(
+    botao
+  );
+
+
+  return card;
+
+}
+
+
+/* =====================================================
+   CARREGAR JOGOS DE HOJE
+===================================================== */
+
+async function carregarJogos(){
+
+  const lista =
+    $("listaJogos");
+
+  lista.innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      Buscando jogos reais...
+    </div>
+  `;
+
+
+  try{
+
+    const hoje =
+      dataHoje();
+
+
+    const dados =
+      await apiGet(
+        "fixtures",
+        {
+          date:hoje,
+          timezone:
+            "America/Sao_Paulo"
+        }
+      );
+
+
+    let jogos =
+      dados.response || [];
+
+
+    /*
+      Não mostrar partidas canceladas.
+    */
+
+    jogos =
+      jogos.filter(
+        jogo =>
+          jogo.fixture?.status?.short
+          !== "CANC"
+      );
+
+
+    /*
+      Ordenar por horário.
+    */
+
+    jogos.sort(
+      (a,b) => {
+
+        const dataA =
+          new Date(
+            a.fixture?.date || 0
+          ).getTime();
+
+        const dataB =
+          new Date(
+            b.fixture?.date || 0
+          ).getTime();
+
+        return dataA - dataB;
+
+      }
+    );
+
+
+    /*
+      Limitar a quantidade
+      para o celular.
+    */
+
+    jogos =
+      jogos.slice(
+        0,
+        30
+      );
+
+
+    lista.innerHTML =
+      "";
+
+
+    if(!jogos.length){
+
+      lista.innerHTML = `
+        <div class="loading">
+          Nenhum jogo encontrado
+          para hoje.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    const grid =
+      document.createElement(
+        "div"
+      );
+
+    grid.className =
+      "games-grid";
+
+
+    jogos.forEach(
+      jogo => {
+
+        const card =
+          criarJogo(jogo);
+
+        if(card){
+
+          grid.appendChild(
+            card
+          );
+
+        }
+
+      }
+    );
+
+
+    lista.appendChild(
+      grid
+    );
+
+
+  }catch(erro){
+
+    console.error(
+      "Erro jogos:",
+      erro
+    );
+
+
+    lista.innerHTML = `
+      <div class="loading">
+        ⚠️ Não foi possível
+        carregar os jogos.
+        <br><br>
+        Verifique a API-Football.
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* =====================================================
+   BUSCAR PREDIÇÃO DA API
+===================================================== */
+
+async function buscarPredicao(
+  fixtureId
+){
+
+  if(!fixtureId){
+
+    return null;
+
+  }
+
+  try{
+
+    const dados =
+      await apiGet(
+        "predictions",
+        {
+          fixture:
+            fixtureId
+        }
+      );
+
+
+    const item =
+      dados.response?.[0];
+
+
+    if(!item){
+
+      return null;
+
+    }
+
+
+    return (
+      item.prediction ||
+      null
+    );
+
+
+  }catch(erro){
+
+    console.log(
+      "Predição indisponível:",
+      erro
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =====================================================
+   BUSCAR ESTATÍSTICAS
+===================================================== */
+
+async function buscarEstatisticas(
+  fixtureId,
+  idCasa,
+  idFora
+){
+
+  const resultado = {
+
+    escanteiosCasa:"--",
+    escanteiosFora:"--",
+
+    posseCasa:"--",
+    posseFora:"--",
+
+    chutesCasa:"--",
+    chutesFora:"--"
+
+  };
+
+
+  if(!fixtureId){
+
+    return resultado;
+
+  }
+
+
+  try{
+
+    const dados =
+      await apiGet(
+        "fixtures/statistics",
+        {
+          fixture:
+            fixtureId
+        }
+      );
+
+
+    const blocos =
+      dados.response || [];
+
+
+    blocos.forEach(
+      bloco => {
+
+        const idTime =
+          Number(
+            bloco.team?.id
+          );
+
+
+        const stats =
+          bloco.statistics || [];
+
+
+        stats.forEach(
+          item => {
+
+            const tipo =
+              item.type;
+
+            const valor =
+              item.value;
+
+
+            if(
+              tipo ===
+              "Corner Kicks"
+            ){
+
+              if(
+                idTime ===
+                Number(idCasa)
+              ){
+
+                resultado.escanteiosCasa =
+                  valor ?? "--";
+
+              }
+
+              if(
+                idTime ===
+                Number(idFora)
+              ){
+
+                resultado.escanteiosFora =
+                  valor ?? "--";
+
+              }
+
+            }
+
+
+            if(
+              tipo ===
+              "Ball Possession"
+            ){
+
+              if(
+                idTime ===
+                Number(idCasa)
+              ){
+
+                resultado.posseCasa =
+                  valor ?? "--";
+
+              }
+
+              if(
+                idTime ===
+                Number(idFora)
+              ){
+
+                resultado.posseFora =
+                  valor ?? "--";
+
+              }
+
+            }
+
+
+            if(
+              tipo ===
+              "Total Shots"
+            ){
+
+              if(
+                idTime ===
+                Number(idCasa)
+              ){
+
+                resultado.chutesCasa =
+                  valor ?? "--";
+
+              }
+
+              if(
+                idTime ===
+                Number(idFora)
+              ){
+
+                resultado.chutesFora =
+                  valor ?? "--";
+
+              }
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+
+  }catch(erro){
+
+    console.log(
+      "Estatísticas indisponíveis:",
+      erro
+    );
+
+  }
+
+
+  return resultado;
+
+}
+
+
+/* =====================================================
+   ANÁLISE COMPLETA
+===================================================== */
+
+async function analisarPartida(
+  fixtureId = null
+){
+
+  const erroBox =
+    $("erro");
+
+
+  erroBox.style.display =
+    "none";
+
+
+  $("resultado")
+    .classList
+    .remove("show");
+
+
+  try{
+
+    let casa;
+    let fora;
+
+    let idCasa;
+    let idFora;
+
+    let idFixture =
+      fixtureId;
+
+
+    /*
+      SELECIONADA PELOS JOGOS
+    */
+
+    if(idFixture){
+
+      const dadosFixture =
+        await apiGet(
+          "fixtures",
+          {
+            id:idFixture
+          }
+        );
+
+
+      const jogo =
+        dadosFixture.response?.[0];
+
+
+      if(!jogo){
+
+        throw new Error(
+          "Partida não encontrada."
+        );
+
+      }
+
+
+      casa =
+        jogo.teams?.home?.name;
+
+      fora =
+        jogo.teams?.away?.name;
+
+      idCasa =
+        jogo.teams?.home?.id;
+
+      idFora =
+        jogo.teams?.away?.id;
+
+    }
+
+
+    /*
+      DIGITADA MANUALMENTE
+    */
+
+    else{
+
+      casa =
+        $("timeCasa")
+          .value
+          .trim();
+
+      fora =
+        $("timeFora")
+          .value
+          .trim();
+
+
+      if(!casa || !fora){
+
+        throw new Error(
+          "Digite os dois times."
+        );
+
+      }
+
+
+      const [timeCasa,timeFora] =
+        await Promise.all([
+
+          buscarTime(casa),
+
+          buscarTime(fora)
+
+        ]);
+
+
+      if(!timeCasa){
+
+        throw new Error(
+          "Não encontrei o time mandante."
+        );
+
+      }
+
+
+      if(!timeFora){
+
+        throw new Error(
+          "Não encontrei o time visitante."
+        );
+
+      }
+
+
+      casa =
+        timeCasa.team?.name ||
+        casa;
+
+      fora =
+        timeFora.team?.name ||
+        fora;
+
+      idCasa =
+        timeCasa.team?.id;
+
+      idFora =
+        timeFora.team?.id;
+
+    }
+
+
+    if(
+      !idCasa ||
+      !idFora
+    ){
+
+      throw new Error(
+        "Não foi possível identificar os times."
+      );
+
+    }
+
+
+    /*
+      Colocar nomes corretos
+      nos campos.
+    */
+
+    $("timeCasa").value =
+      casa;
+
+    $("timeFora").value =
+      fora;
+
+
+    $("tituloPartida").textContent =
+      casa +
+      " x " +
+      fora;
+
+
+    /*
+      Buscar históricos
+      ao mesmo tempo.
+    */
+
+    const [
+      jogosCasa,
+      jogosFora
+    ] =
+      await Promise.all([
+
+        buscarHistoricoTime(
+          idCasa
+        ),
+
+        buscarHistoricoTime(
+          idFora
+        )
+
+      ]);
+
+
+    const formaCasa =
+      calcularForma(
+        jogosCasa,
+        idCasa
+      );
+
+
+    const formaFora =
+      calcularForma(
+        jogosFora,
+        idFora
+      );
+
+
+    /*
+      Modelo principal.
+    */
+
+    const local =
+      $("localJogo")
+        .value;
+
+
+    const modelo =
+      calcularModelo(
+        formaCasa,
+        formaFora,
+        local
+      );
+
+
+    /*
+      Tentar pegar predição
+      oficial da API.
+    */
+
+    const prediction =
+      await buscarPredicao(
+        idFixture
+      );
+
+
+    let probCasa =
+      modelo.probCasa;
+
+    let probEmpate =
+      modelo.probEmpate;
+
+    let probFora =
+      modelo.probFora;
+
+
+    let fonte =
+      "Histórico + modelo GolZen";
+
+
+    /*
+      Se a API fornecer
+      percentuais válidos,
+      aproveitamos esses dados.
+    */
+
+    if(
+      prediction &&
+      prediction.percent
+    ){
+
+      const pCasa =
+        porcentagem(
+          prediction.percent.home
+        );
+
+      const pEmpate =
+        porcentagem(
+          prediction.percent.draw
+        );
+
+      const pFora =
+        porcentagem(
+          prediction.percent.away
+        );
+
+
+      if(
+        pCasa !== null &&
+        pEmpate !== null &&
+        pFora !== null
+      ){
+
+        const normalizado =
+          normalizarProbabilidades(
+            pCasa,
+            pEmpate,
+            pFora
+          );
+
+
+        probCasa =
+          normalizado.casa;
+
+        probEmpate =
+          normalizado.empate;
+
+        probFora =
+          normalizado.fora;
+
+
+        fonte =
+          "Histórico + API-Football";
+
+      }
+
+    }
+
+
+    /*
+      Tendência.
+    */
+
+    let tendencia =
+      "⚖️ Equilíbrio";
+
+
+    if(
+      probCasa >
+      probEmpate &&
+      probCasa >
+      probFora
+    ){
+
+      tendencia =
+        "🏠 " +
+        casa;
+
+    }else if(
+      probFora >
+      probCasa &&
+      probFora >
+      probEmpate
+    ){
+
+      tendencia =
+        "✈️ " +
+        fora;
+
+    }
+
+
+    /*
+      Estatísticas da partida.
+    */
+
+    const estatisticas =
+      await buscarEstatisticas(
+        idFixture,
+        idCasa,
+        idFora
+      );
+
+
+    /*
+      Escanteios.
+    */
+
+    let textoEscanteios =
+      "--";
+
+
+    if(
+      estatisticas.escanteiosCasa !== "--" &&
+      estatisticas.escanteiosFora !== "--"
+    ){
+
+      textoEscanteios =
+        estatisticas.escanteiosCasa +
+        " x " +
+        estatisticas.escanteiosFora;
+
+    }
+
+
+    /*
+      Posse.
+    */
+
+    let textoPosse =
+      "--";
+
+
+    if(
+      estatisticas.posseCasa !== "--" ||
+      estatisticas.posseFora !== "--"
+    ){
+
+      textoPosse =
+        estatisticas.posseCasa +
+        " x " +
+        estatisticas.posseFora;
+
+    }
+
+
+    /*
+      Finalizações.
+    */
+
+    let textoChutes =
+      "--";
+
+
+    if(
+      estatisticas.chutesCasa !== "--" ||
+      estatisticas.chutesFora !== "--"
+    ){
+
+      textoChutes =
+        estatisticas.chutesCasa +
+        " x " +
+        estatisticas.chutesFora;
+
+    }
+
+
+    /*
+      Preencher resultado.
+    */
+
+    $("vitoriaCasa").textContent =
+      Math.round(
+        probCasa * 100
+      ) + "%";
+
+
+    $("empate").textContent =
+      Math.round(
+        probEmpate * 100
+      ) + "%";
+
+
+    $("vitoriaFora").textContent =
+      Math.round(
+        probFora * 100
+      ) + "%";
+
+
+    $("mais15").textContent =
+      Math.round(
+        modelo.probMais15 * 100
+      ) + "%";
+
+
+    $("mais25").textContent =
+      Math.round(
+        modelo.probMais25 * 100
+      ) + "%";
+
+
+    $("ambas").textContent =
+      Math.round(
+        modelo.probAmbas * 100
+      ) + "%";
+
+
+    $("totalGols").textContent =
+      modelo.totalGols
+        .toFixed(2) +
+      " gols";
+
+
+    $("placar").textContent =
+      modelo.placar;
+
+
+    $("tendencia").textContent =
+      tendencia;
+
+
+    $("escanteios").textContent =
+      textoEscanteios;
+
+
+    $("posse").textContent =
+      textoPosse;
+
+
+    $("chutes").textContent =
+      textoChutes;
+
+
+    $("historicoCasa").textContent =
+      formaCasa.jogos +
+      " jogos";
+
+
+    $("historicoFora").textContent =
+      formaFora.jogos +
+      " jogos";
+
+
+    $("fonteDados").textContent =
+      fonte;
+
+
+    /*
+      Montar análise em texto.
+    */
+
+    let texto =
+      "📊 O GolZen analisou " +
+      casa +
+      " x " +
+      fora +
+      ". ";
+
+
+    if(
+      formaCasa.jogos > 0
+    ){
+
+      texto +=
+        casa +
+        " possui média de " +
+        formaCasa.mediaMarcados.toFixed(2) +
+        " gols marcados e " +
+        formaCasa.mediaSofridos.toFixed(2) +
+        " sofridos nos jogos analisados. ";
+
+    }else{
+
+      texto +=
+        "Não foi encontrado histórico suficiente para " +
+        casa +
+        ". ";
+
+    }
+
+
+    if(
+      formaFora.jogos > 0
+    ){
+
+      texto +=
+        fora +
+        " possui média de " +
+        formaFora.mediaMarcados.toFixed(2) +
+        " gols marcados e " +
+        formaFora.mediaSofridos.toFixed(2) +
+        " sofridos nos jogos analisados. ";
+
+    }else{
+
+      texto +=
+        "Não foi encontrado histórico suficiente para " +
+        fora +
+        ". ";
+
+    }
+
+
+    texto +=
+      "🎯 Tendência calculada: " +
+      tendencia +
+      ". ";
+
+
+    texto +=
+      "⚽ O modelo estima " +
+      modelo.totalGols.toFixed(2) +
+      " gols no total. ";
+
+
+    texto +=
+      "📌 Placar estatístico sugerido: " +
+      modelo.placar +
+      ". ";
+
+
+    texto +=
+      "📈 Mais de 1,5 gols: " +
+      Math.round(
+        modelo.probMais15 * 100
+      ) +
+      "%. ";
+
+
+    texto +=
+      "Mais de 2,5 gols: " +
+      Math.round(
+        modelo.probMais25 * 100
+      ) +
+      "%. ";
+
+
+    texto +=
+      "Ambas marcam: " +
+      Math.round(
+        modelo.probAmbas * 100
+      ) +
+      "%.";
+
+
+    $("analise").textContent =
+      texto;
+
+
+    /*
+      Mostrar resultado.
+    */
+
+    $("resultado")
+      .classList
+      .add("show");
+
+
+    $("resultado")
+      .scrollIntoView({
+        behavior:"smooth"
+      });
+
+
+  }catch(erro){
+
+    console.error(
+      "Erro na análise:",
+      erro
+    );
+
+
+    erroBox.style.display =
+      "block";
+
+
+    erroBox.textContent =
+      "⚠️ " +
+      (
+        erro.message ||
+        "Não foi possível gerar a análise."
+      );
+
+  }
+
+}
+
+
+/* =====================================================
+   BOTÃO GERAR PALPITE
+===================================================== */
+
+async function gerarPalpite(){
+
+  const botao =
+    $("btnAnalisar");
+
+
+  botao.disabled =
+    true;
+
+
+  botao.textContent =
+    "⏳ ANALISANDO...";
+
+
+  try{
+
+    await analisarPartida(
+      fixtureSelecionado
+    );
+
+  }finally{
+
+    botao.disabled =
+      false;
+
+    botao.textContent =
+      "🔎 GERAR ANÁLISE";
+
+  }
+
+}
+
+
+/* =====================================================
+   INICIAR GOLZEN
+===================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    carregarJogos();
+
+  }
+);
+
+</script>
+
+</body>
+</html>
+
+       
