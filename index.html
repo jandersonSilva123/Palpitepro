@@ -2189,8 +2189,8 @@ carregarJogos();
 
     const respostaFixture = await fetch(
       API_GOLZEN +
-      "?endpoint=fixtures&ids=" +
-      fixtureId
+      "?endpoint=fixtures&id=" +
+fixtureId
     );
 
     const dadosFixture = await respostaFixture.json();
